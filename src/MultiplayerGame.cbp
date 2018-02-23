@@ -34,8 +34,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Constants.hpp" />
-		<Unit filename="Packet.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="net/Packet.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
