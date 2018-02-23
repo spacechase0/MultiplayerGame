@@ -13,14 +13,17 @@
 #include "net/Broadcast/Packet.hpp"
 #include "net/Broadcast/SearchPacket.hpp"
 #include "net/Broadcast/ServerInfoPacket.hpp"
+#include "server/LanDiscovery.hpp"
 
 void runClient()
 {
-    std::string ip;
+    std::string ipStr;
     std::cout << "Server IP: ";
-    std::getline( std::cin, ip );
+    std::getline( std::cin, ipStr );
 
-    if ( ip == "" )
+    sf::IpAddress ip;
+    int port;
+    if ( ipStr == "" )
     {
         client::LanDiscovery lanDisco;
         std::vector< client::LanDiscovery::ServerInfo > found;
@@ -33,53 +36,31 @@ void runClient()
         };
         lanDisco.start();
 
-        while ( true )
-            sf::sleep( sf::seconds( 0.1f ) );
+        unsigned int choice;
+        std::cin >> choice;
+
+        ip = found[ choice - 1 ].ip;
+        port = found[ choice - 1 ].port;
     }
+    else
+    {
+        ip = sf::IpAddress( ipStr );
+
+        std::cout << "Server Port: ";
+        std::cin >> port;
+    }
+
+    while ( true )
+        sf::sleep( sf::seconds( 0.1f ) );
 }
 
 void runServer()
 {
-    bool searchListening = true;
-    auto listenSearch = [&]()
-    {
-        sf::UdpSocket listenSocket;
-        listenSocket.setBlocking( false );
-        if ( listenSocket.bind( net::BROADCAST_REQ_PORT ) != sf::Socket::Done )
-        {
-            std::cout << "Failed to bind UDP socket" << std::endl;
-            return;
-        }
+    server::LanDiscovery lanDisco;
+    lanDisco.start();
 
-        sf::Packet packet;
-        while ( searchListening )
-        {
-            sf::IpAddress ip;
-            sf::Uint16 port;
-            if ( listenSocket.receive( packet, ip, port ) == sf::Socket::Done )
-            {
-                auto packetObj = net::Broadcast::Packet::fromPacket( packet );
-                if ( packetObj && packetObj->id == net::Broadcast::Id::Search )
-                {
-                    net::Broadcast::ServerInfoPacket info;
-                    info.name = "Server";
-                    info.port = net::GAME_PORT;
-                    info.hasPassword = false;
-
-                    sf::Packet send = info.toPacket();
-
-                    sf::UdpSocket socket;
-                    if ( socket.send( send, ip, net::BROADCAST_RESP_PORT ) != sf::Socket::Done )
-                    {
-                        std::cout << "Failed to send response to server search" << std::endl;
-                    }
-                }
-            }
-            sf::sleep( sf::seconds( 0.1f ) );
-        }
-    };
-    sf::Thread searchThread( listenSearch );
-    searchThread.launch();
+    while ( true )
+        sf::sleep( sf::seconds( 0.1f ) );
 }
 
 int main()

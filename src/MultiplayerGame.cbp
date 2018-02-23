@@ -46,6 +46,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Constants.hpp" />
+		<Unit filename="client/LanDiscovery.cpp" />
+		<Unit filename="client/LanDiscovery.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="net/Broadcast/Packet.cpp" />
 		<Unit filename="net/Broadcast/Packet.hpp" />
@@ -54,6 +56,8 @@
 		<Unit filename="net/Broadcast/ServerInfoPacket.cpp" />
 		<Unit filename="net/Broadcast/ServerInfoPacket.hpp" />
 		<Unit filename="net/PacketBase.hpp" />
+		<Unit filename="server/LanDiscovery.cpp" />
+		<Unit filename="server/LanDiscovery.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
