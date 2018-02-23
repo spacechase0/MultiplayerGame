@@ -7,19 +7,26 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="../MultiplayerGame" prefix_auto="1" extension_auto="1" />
+				<Option output="../MultiplayerGame_Debug" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="../" />
-				<Option object_output="obj/Debug/" />
+				<Option object_output="../obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add option="-lsc0-utility-d" />
+					<Add option="-lsfml-network-d" />
+					<Add option="-lsfml-graphics-d" />
+					<Add option="-lsfml-window-d" />
+					<Add option="-lsfml-system-d" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="../MultiplayerGame" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="../" />
-				<Option object_output="obj/Release/" />
+				<Option object_output="../obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
@@ -27,6 +34,11 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-lsc0-utility" />
+					<Add option="-lsfml-network" />
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
 				</Linker>
 			</Target>
 		</Build>
@@ -35,7 +47,13 @@
 		</Compiler>
 		<Unit filename="Constants.hpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="net/Packet.hpp" />
+		<Unit filename="net/Broadcast/Packet.cpp" />
+		<Unit filename="net/Broadcast/Packet.hpp" />
+		<Unit filename="net/Broadcast/SearchPacket.cpp" />
+		<Unit filename="net/Broadcast/SearchPacket.hpp" />
+		<Unit filename="net/Broadcast/ServerInfoPacket.cpp" />
+		<Unit filename="net/Broadcast/ServerInfoPacket.hpp" />
+		<Unit filename="net/PacketBase.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

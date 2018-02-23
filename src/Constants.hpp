@@ -5,7 +5,10 @@
 
 namespace net
 {
-    constexpr sf::Uint15 VERSION = 0;
+    constexpr sf::Uint16 VERSION = 0;
+    constexpr sf::Uint16 BROADCAST_REQ_PORT = 12346;
+    constexpr sf::Uint16 BROADCAST_RESP_PORT = 12347;
+    constexpr sf::Uint16 GAME_PORT = 12345;
 }
 
 #endif // CONSTANTS_HPP
