@@ -8,6 +8,7 @@
 #include <string>
 #include <util/String.hpp>
 
+#include "client/LanDiscovery.hpp"
 #include "Constants.hpp"
 #include "net/Broadcast/Packet.hpp"
 #include "net/Broadcast/SearchPacket.hpp"
@@ -21,57 +22,19 @@ void runClient()
 
     if ( ip == "" )
     {
-        sf::UdpSocket socket;
-        socket.setBlocking( true );
-        sf::Packet searchPacket = net::Broadcast::SearchPacket().toPacket();
-        if ( socket.send( searchPacket, sf::IpAddress::Broadcast, net::BROADCAST_REQ_PORT ) != sf::Socket::Done )
-        {
-            std::cout << "Error broadcasting search" << std::endl;
-            return;
-        }
-
-        struct ServerInfo
-        {
-            sf::IpAddress ip;
-            sf::Uint16 port;
-            std::string name;
-            bool hasPassword;
-        };
-
-        bool listening = true;
-        std::vector< ServerInfo > found;
+        client::LanDiscovery lanDisco;
+        std::vector< client::LanDiscovery::ServerInfo > found;
         sf::Mutex foundMutex;
 
-        auto listen = [&]()
+        lanDisco.onDiscovery = [&]( client::LanDiscovery::ServerInfo info )
         {
-            sf::UdpSocket listenSocket;
-            listenSocket.setBlocking( false );
-            if ( listenSocket.bind( net::BROADCAST_RESP_PORT ) != sf::Socket::Done )
-            {
-                std::cout << "Failed to bind UDP socket" << std::endl;
-                return;
-            }
-            sf::Packet packet;
-            while ( listening )
-            {
-                sf::IpAddress ip;
-                sf::Uint16 port;
-                if ( listenSocket.receive( packet, ip, port ) == sf::Socket::Done )
-                {
-                    auto packetObj = net::Broadcast::Packet::fromPacket( packet );
-                    if ( packetObj && packetObj->id == net::Broadcast::Id::ServerInfo )
-                    {
-                        auto info = static_cast< net::Broadcast::ServerInfoPacket* >( packetObj.get() );
-                        sf::Lock lock( foundMutex );
-                        found.push_back( ServerInfo{ ip, info->port, info->name, info->hasPassword } );
-                        std::cout << util::format( "$. $ ([$]:$)" + std::string( info->hasPassword ? " P" : "" ), found.size(), info->name, ip, info->port ) << std::endl;
-                    }
-                }
-                sf::sleep( sf::seconds( 0.1f ) );
-            }
+            found.push_back( info );
+            std::cout << util::format( "$. $ ([$]:$)" + std::string( info.hasPassword ? " P" : "" ), found.size(), info.name, ip, info.port ) << std::endl;
         };
-        sf::Thread thread( listen );
-        thread.launch();
+        lanDisco.start();
+
+        while ( true )
+            sf::sleep( sf::seconds( 0.1f ) );
     }
 }
 
