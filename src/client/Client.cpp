@@ -2,8 +2,8 @@
 
 namespace client
 {
-    Client::Client( std::unique_ptr< sf::TcpSocket > theSocket, std::string theName )
-    :   name( theName ),
+    Client::Client( std::unique_ptr< sf::TcpSocket > theSocket, std::string theUsername )
+    :   username( theUsername ),
         socket( std::move( theSocket ) )
     {
     }
