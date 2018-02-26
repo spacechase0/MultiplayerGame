@@ -1,6 +1,8 @@
 #include <iostream>
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/UdpSocket.hpp>
+#include <SFML/Network/TcpListener.hpp>
+#include <SFML/Network/TcpSocket.hpp>
 #include <SFML/System/Lock.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Sleep.hpp>
@@ -50,6 +52,15 @@ void runClient()
         std::cin >> port;
     }
 
+    sf::TcpSocket socket;
+    if ( socket.connect( ip, port ) != sf::Socket::Done )
+    {
+        std::cout << "Failed to connect!" << std::endl;
+        return;
+    }
+    std::cout << "Connected." << std::endl;
+
+
     while ( true )
         sf::sleep( sf::seconds( 0.1f ) );
 }
@@ -58,6 +69,22 @@ void runServer()
 {
     server::LanDiscovery lanDisco;
     lanDisco.start();
+
+    sf::TcpListener listener;
+    std::vector< std::unique_ptr< sf::TcpSocket > > clients;
+    auto doListen = [&]()
+    {
+        listener.listen( net::GAME_PORT );
+
+        auto client = std::make_unique< sf::TcpSocket >();
+        if ( listener.accept( * client ) == sf::Socket::Done )
+        {
+            std::cout << "Got client" << std::endl;
+            clients.push_back( std::move( client ) );
+        }
+    };
+    sf::Thread listenThread( doListen );
+    listenThread.launch();
 
     while ( true )
         sf::sleep( sf::seconds( 0.1f ) );
