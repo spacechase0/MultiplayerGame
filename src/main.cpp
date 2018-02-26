@@ -17,6 +17,7 @@
 #include "net/Broadcast/SearchPacket.hpp"
 #include "net/Broadcast/ServerInfoPacket.hpp"
 #include "server/LanDiscovery.hpp"
+#include "server/Server.hpp"
 
 void runClient()
 {
@@ -53,9 +54,9 @@ void runClient()
         std::cin >> port;
     }
 
-    std::string name;
-    std::cout << "Name: ";
-    std::getline( std::cin, name );
+    std::string username;
+    std::cout << "Username: ";
+    std::cin >> username;
 
     auto socket = std::make_unique< sf::TcpSocket >();
     if ( socket->connect( ip, port ) != sf::Socket::Done )
@@ -65,7 +66,7 @@ void runClient()
     }
     std::cout << "Connected." << std::endl;
 
-    client::Client client( std::move( socket ), name );
+    client::Client client( std::move( socket ), username );
 
     while ( true )
         sf::sleep( sf::seconds( 0.1f ) );
@@ -73,24 +74,8 @@ void runClient()
 
 void runServer()
 {
-    server::LanDiscovery lanDisco;
-    lanDisco.start();
-
-    sf::TcpListener listener;
-    std::vector< std::unique_ptr< sf::TcpSocket > > clients;
-    auto doListen = [&]()
-    {
-        listener.listen( net::GAME_PORT );
-
-        auto client = std::make_unique< sf::TcpSocket >();
-        if ( listener.accept( * client ) == sf::Socket::Done )
-        {
-            std::cout << "Got client" << std::endl;
-            clients.push_back( std::move( client ) );
-        }
-    };
-    sf::Thread listenThread( doListen );
-    listenThread.launch();
+    server::Server server;
+    server.start();
 
     while ( true )
         sf::sleep( sf::seconds( 0.1f ) );

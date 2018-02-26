@@ -1,0 +1,37 @@
+#ifndef SERVER_SERVER_HPP
+#define SERVER_SERVER_HPP
+
+#include <memory>
+#include <SFML/Network/TcpListener.hpp>
+#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/System/Mutex.hpp>
+#include <SFML/System/Thread.hpp>
+#include <string>
+#include <vector>
+
+#include "server/LanDiscovery.hpp"
+
+namespace server
+{
+    class Server
+    {
+        public:
+            Server();
+
+            void start();
+
+            std::string name = "Game Server";
+
+        private:
+            LanDiscovery discovery;
+
+            sf::TcpListener listener;
+            sf::Thread listenThread;
+            void listen();
+
+            sf::Mutex clientsMutex;
+            std::vector< std::unique_ptr< sf::TcpSocket > > clients;
+    };
+}
+
+#endif // SERVER_SERVER_HPP
