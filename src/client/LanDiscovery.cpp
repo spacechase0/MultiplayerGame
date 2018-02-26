@@ -20,7 +20,7 @@ namespace client
         stop();
     }
 
-    bool LanDiscovery::start()
+    void LanDiscovery::start()
     {
         sf::UdpSocket socket;
         socket.setBlocking( true );

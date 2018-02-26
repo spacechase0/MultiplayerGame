@@ -20,8 +20,8 @@ namespace net
                 std::string name = "Server";
                 bool hasPassword = false;
 
-                virtual read( sf::Packet& packet ) override;
-                virtual write( sf::Packet& packet ) const override;
+                virtual void read( sf::Packet& packet ) override;
+                virtual void write( sf::Packet& packet ) const override;
         };
     }
 }

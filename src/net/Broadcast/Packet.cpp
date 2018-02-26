@@ -15,7 +15,7 @@ namespace net
             packet << static_cast< sf::Uint8 >( id );
             write( packet );
             return packet;
-        };
+        }
 
         std::unique_ptr< Packet > Packet::fromPacket( sf::Packet& packet )
         {

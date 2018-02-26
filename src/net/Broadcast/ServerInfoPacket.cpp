@@ -11,12 +11,12 @@ namespace net
         {
         }
 
-        ServerInfoPacket::read ( sf::Packet& packet )
+        void ServerInfoPacket::read ( sf::Packet& packet )
         {
             packet >> port >> name >> hasPassword;
         }
 
-        ServerInfoPacket::write ( sf::Packet& packet ) const
+        void ServerInfoPacket::write ( sf::Packet& packet ) const
         {
             packet << port << name << hasPassword;
         }

@@ -9,11 +9,11 @@ namespace net
         {
         }
 
-        SearchPacket::read ( sf::Packet& packet )
+        void SearchPacket::read( sf::Packet& packet )
         {
         }
 
-        SearchPacket::write ( sf::Packet& packet ) const
+        void SearchPacket::write( sf::Packet& packet ) const
         {
         }
     }

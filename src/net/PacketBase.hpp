@@ -20,8 +20,8 @@ namespace net
         protected:
             PacketBase( PACKET_ID theId ) : id( theId ) {};
 
-            virtual read ( sf::Packet& packet ) = 0;
-            virtual write ( sf::Packet& packet ) const = 0;
+            virtual void read ( sf::Packet& packet ) = 0;
+            virtual void write ( sf::Packet& packet ) const = 0;
     };
 }
 

@@ -18,7 +18,7 @@ namespace server
             std::string name = "Server";
             bool hasPassword = false;
 
-            bool start();
+            void start();
             void stop();
 
         private:

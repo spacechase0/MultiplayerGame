@@ -23,7 +23,7 @@ namespace client
                 bool hasPassword;
             };
 
-            bool start();
+            void start();
             void stop();
 
             std::function< void ( ServerInfo ) > onDiscovery;
