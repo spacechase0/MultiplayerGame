@@ -1,13 +1,15 @@
 #include "server/Server.hpp"
 
 #include <SFML/System/Lock.hpp>
+#include <SFML/System/Sleep.hpp>
 
 #include "Constants.hpp"
 
 namespace server
 {
     Server::Server()
-    :   listenThread( &Server::listen, this )
+    :   listenThread( &Server::listen, this ),
+        mainThread( &Server::main, this )
     {
     }
 
@@ -15,6 +17,7 @@ namespace server
     {
         discovery.start();
         listenThread.launch();
+        mainThread.launch();
     }
 
     void Server::listen()
@@ -27,5 +30,11 @@ namespace server
             sf::Lock lock( clientsMutex );
             clients.push_back( std::move( client ) );
         }
+    }
+
+    void Server::main()
+    {
+        while ( true )
+            sf::sleep( sf::seconds( 0.1f ) );
     }
 }

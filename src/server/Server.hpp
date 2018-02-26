@@ -31,6 +31,9 @@ namespace server
 
             sf::Mutex clientsMutex;
             std::vector< std::unique_ptr< sf::TcpSocket > > clients;
+
+            sf::Thread mainThread;
+            void main();
     };
 }
 

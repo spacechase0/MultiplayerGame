@@ -1,22 +1,10 @@
 #include <iostream>
-#include <SFML/Network/Packet.hpp>
-#include <SFML/Network/UdpSocket.hpp>
-#include <SFML/Network/TcpListener.hpp>
-#include <SFML/Network/TcpSocket.hpp>
-#include <SFML/System/Lock.hpp>
-#include <SFML/System/Mutex.hpp>
 #include <SFML/System/Sleep.hpp>
-#include <SFML/System/Thread.hpp>
 #include <string>
 #include <util/String.hpp>
 
 #include "client/Client.hpp"
 #include "client/LanDiscovery.hpp"
-#include "Constants.hpp"
-#include "net/Broadcast/Packet.hpp"
-#include "net/Broadcast/SearchPacket.hpp"
-#include "net/Broadcast/ServerInfoPacket.hpp"
-#include "server/LanDiscovery.hpp"
 #include "server/Server.hpp"
 
 void runClient()
@@ -76,9 +64,6 @@ void runServer()
 {
     server::Server server;
     server.start();
-
-    while ( true )
-        sf::sleep( sf::seconds( 0.1f ) );
 }
 
 int main()
