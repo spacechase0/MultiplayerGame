@@ -46,6 +46,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="Constants.hpp" />
+		<Unit filename="client/Client.cpp" />
+		<Unit filename="client/Client.hpp" />
 		<Unit filename="client/LanDiscovery.cpp" />
 		<Unit filename="client/LanDiscovery.hpp" />
 		<Unit filename="main.cpp" />
@@ -56,8 +58,18 @@
 		<Unit filename="net/Broadcast/ServerInfoPacket.cpp" />
 		<Unit filename="net/Broadcast/ServerInfoPacket.hpp" />
 		<Unit filename="net/PacketBase.hpp" />
+		<Unit filename="net/Verify/ClientUsernamePacket.cpp" />
+		<Unit filename="net/Verify/ClientUsernamePacket.hpp" />
+		<Unit filename="net/Verify/ContinuePacket.cpp" />
+		<Unit filename="net/Verify/ContinuePacket.hpp" />
+		<Unit filename="net/Verify/Packet.cpp" />
+		<Unit filename="net/Verify/Packet.hpp" />
+		<Unit filename="net/Verify/VersionPacket.cpp" />
+		<Unit filename="net/Verify/VersionPacket.hpp" />
 		<Unit filename="server/LanDiscovery.cpp" />
 		<Unit filename="server/LanDiscovery.hpp" />
+		<Unit filename="server/Server.cpp" />
+		<Unit filename="server/Server.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
