@@ -10,6 +10,7 @@
 #include <string>
 #include <util/String.hpp>
 
+#include "client/Client.hpp"
 #include "client/LanDiscovery.hpp"
 #include "Constants.hpp"
 #include "net/Broadcast/Packet.hpp"
@@ -52,14 +53,19 @@ void runClient()
         std::cin >> port;
     }
 
-    sf::TcpSocket socket;
-    if ( socket.connect( ip, port ) != sf::Socket::Done )
+    std::string name;
+    std::cout << "Name: ";
+    std::getline( std::cin, name );
+
+    auto socket = std::make_unique< sf::TcpSocket >();
+    if ( socket->connect( ip, port ) != sf::Socket::Done )
     {
         std::cout << "Failed to connect!" << std::endl;
         return;
     }
     std::cout << "Connected." << std::endl;
 
+    client::Client client( std::move( socket ), name );
 
     while ( true )
         sf::sleep( sf::seconds( 0.1f ) );
