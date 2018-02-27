@@ -9,8 +9,14 @@ namespace game
         Fighter,
         Mage,
         Archer,
+    };
 
-        Count
+    class Unit
+    {
+        public:
+            Unit( UnitType theType );
+
+            const UnitType type;
     };
 }
 

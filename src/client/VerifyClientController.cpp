@@ -26,10 +26,11 @@ namespace client
         auto packetObj = net::Verify::Packet::fromPacket( packet );
         if ( packetObj->id == net::Verify::Id::Continue )
         {
-            if ( sentUsername )
+            if ( !sentUsername )
             {
                 client.log( "Sending username...\n" );
                 client.send( net::Verify::ClientUsernamePacket( client.username ).toPacket() );
+                sentUsername = true;
             }
             else
             {

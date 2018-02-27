@@ -4,6 +4,11 @@
 #include <memory>
 #include <SFML/Network/TcpSocket.hpp>
 
+namespace game
+{
+    class Unit;
+}
+
 namespace server
 {
     class ClientController;
@@ -24,6 +29,8 @@ namespace server
 
             const sf::Uint64 id;
             std::string username;
+
+            std::vector< std::unique_ptr< game::Unit > > units;
 
         private:
             Server& server;

@@ -2,6 +2,7 @@
 
 #include <util/Logger.hpp>
 
+#include "game/Unit.hpp"
 #include "server/ClientController.hpp"
 #include "server/VerifyClientController.hpp"
 #include "server/Server.hpp"
