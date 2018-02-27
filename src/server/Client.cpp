@@ -1,17 +1,22 @@
 #include "server/Client.hpp"
 
+#include <util/Logger.hpp>
+
 #include "server/ClientController.hpp"
 #include "server/VerifyClientController.hpp"
+#include "server/Server.hpp"
 
 namespace server
 {
     sf::Uint64 clientIdCounter = 0;
 
-    Client::Client( std::unique_ptr< sf::TcpSocket > theSocket )
+    Client::Client( Server& theServer, std::unique_ptr< sf::TcpSocket > theSocket )
     :   id( clientIdCounter++ ),
+        server( theServer ),
         socket( std::move( theSocket ) ),
-        controller( new VerifyClientController( * this ) )
+        controller( new VerifyClientController( theServer, ( * this ) ) )
     {
+        server.log( "Client $ connected.\n", id );
     }
 
     Client::~Client()
@@ -23,8 +28,9 @@ namespace server
         return socket->getLocalPort() != 0;
     }
 
-    void Client::disconnect()
+    void Client::disconnect( const std::string& reason )
     {
+        server.log( "Disconnecting client $ for $\n", id, reason );
         socket->disconnect();
     }
 

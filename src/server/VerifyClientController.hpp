@@ -14,7 +14,7 @@ namespace server
             virtual void onPacket( sf::Packet& packet );
 
         private:
-            bool verified;
+            bool verified = false;
     };
 }
 

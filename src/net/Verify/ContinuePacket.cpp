@@ -7,7 +7,7 @@ namespace net
     namespace Verify
     {
         ContinuePacket::ContinuePacket()
-        :   Packet::Packet( Id::Version )
+        :   Packet::Packet( Id::Continue )
         {
         }
 

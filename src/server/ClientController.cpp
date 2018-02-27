@@ -4,8 +4,9 @@
 
 namespace server
 {
-    ClientController::ClientController( Client& theClient )
-    :   client( theClient )
+    ClientController::ClientController( Server& theServer, Client& theClient )
+    :   server( theServer ),
+        client( theClient )
     {
     }
 

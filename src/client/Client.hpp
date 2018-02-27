@@ -4,6 +4,7 @@
 #include <memory>
 #include <SFML/Network/TcpSocket.hpp>
 #include <string>
+#include <util/Logger.hpp>
 
 namespace client
 {
@@ -23,6 +24,8 @@ namespace client
             void stop();
 
             const std::string username;
+
+            util::Logger log;
 
         private:
             std::unique_ptr< sf::TcpSocket > socket;

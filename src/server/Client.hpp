@@ -7,15 +7,16 @@
 namespace server
 {
     class ClientController;
+    class Server;
 
     class Client
     {
         public:
-            Client( std::unique_ptr< sf::TcpSocket > theSocket );
+            Client( Server& theServer, std::unique_ptr< sf::TcpSocket > theSocket );
             ~Client();
 
             bool isConnected() const;
-            void disconnect();
+            void disconnect( const std::string& reason = "");
 
             void update();
 
@@ -25,6 +26,8 @@ namespace server
             std::string username;
 
         private:
+            Server& server;
+
             std::unique_ptr< sf::TcpSocket > socket;
             std::unique_ptr< ClientController > controller;
 

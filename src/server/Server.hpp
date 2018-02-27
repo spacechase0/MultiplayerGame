@@ -6,6 +6,7 @@
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Thread.hpp>
 #include <string>
+#include <util/Logger.hpp>
 #include <vector>
 
 #include "server/Client.hpp"
@@ -22,6 +23,8 @@ namespace server
 
             std::string name = "Game Server";
             std::string password = "";
+
+            util::Logger log;
 
         private:
             LanDiscovery discovery;

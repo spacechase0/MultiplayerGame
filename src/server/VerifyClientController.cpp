@@ -6,6 +6,7 @@
 #include "net/Verify/ContinuePacket.hpp"
 #include "net/Verify/ClientUsernamePacket.hpp"
 #include "server/Client.hpp"
+#include "server/Server.hpp"
 
 namespace server
 {
@@ -19,7 +20,7 @@ namespace server
                 auto version = static_cast< net::Verify::VersionPacket* >( packetObj.get() );
                 if ( version->version != net::PROTOCOL_VERSION )
                 {
-                    client.disconnect();
+                    client.disconnect( "bad version" );
                     return;
                 }
                 verified = true;
@@ -32,6 +33,7 @@ namespace server
             {
                 auto username = static_cast< net::Verify::ClientUsernamePacket* >( packetObj.get() );
                 client.username = username->username;
+                server.log( "Client $ is $\n", client.id, client.username );
             }
         }
     }

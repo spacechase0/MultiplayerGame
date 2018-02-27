@@ -53,6 +53,7 @@ void runClient()
         return;
     }
     std::cout << "Connected." << std::endl;
+    socket->setBlocking( false );
 
     client::Client client( std::move( socket ), username );
     client.run();

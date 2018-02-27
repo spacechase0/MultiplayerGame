@@ -8,6 +8,7 @@ namespace client
 {
     Client::Client( std::unique_ptr< sf::TcpSocket > theSocket, std::string theUsername )
     :   username( theUsername ),
+        log( "client.log" ),
         socket( std::move( theSocket ) ),
         controller( new VerifyClientController( * this ) )
     {

@@ -9,7 +9,8 @@
 namespace server
 {
     Server::Server()
-    :   discovery( * this ),
+    :   log( "server.log" ),
+        discovery( * this ),
         listenThread( &Server::listen, this ),
         mainThread( &Server::main, this )
     {
@@ -29,17 +30,21 @@ namespace server
         auto client = std::make_unique< sf::TcpSocket >();
         if ( listener.accept( * client ) == sf::Socket::Done )
         {
+            client->setBlocking( false );
             sf::Lock lock( clientsMutex );
-            clients.push_back( std::make_unique< Client >( std::move( client ) ) );
+            clients.push_back( std::make_unique< Client >( ( * this ), std::move( client ) ) );
         }
     }
 
     void Server::main()
     {
-        for ( auto& client : clients )
-            client->update();
 
         while ( true )
+        {
+            for ( auto& client : clients )
+                client->update();
+
             sf::sleep( sf::seconds( 1.f / 100 ) );
+        }
     }
 }
