@@ -54,6 +54,8 @@
 		<Unit filename="client/LanDiscovery.hpp" />
 		<Unit filename="client/LobbyClientController.cpp" />
 		<Unit filename="client/LobbyClientController.hpp" />
+		<Unit filename="client/MatchClientController.cpp" />
+		<Unit filename="client/MatchClientController.hpp" />
 		<Unit filename="client/VerifyClientController.cpp" />
 		<Unit filename="client/VerifyClientController.hpp" />
 		<Unit filename="game/Unit.cpp" />

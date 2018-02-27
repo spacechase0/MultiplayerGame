@@ -4,6 +4,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "client/Client.hpp"
+#include "client/MatchClientController.hpp"
 #include "Constants.hpp"
 #include "net/Lobby/UnitAllocationPacket.hpp"
 
@@ -128,7 +129,7 @@ namespace client
         window.draw( text );
         if ( justClicked && text.getGlobalBounds().contains( clickPos.x, clickPos.y ) )
         {
-            client.log( "Done allocating units" );
+            client.log( "Done allocating units\n" );
             allocating = false;
             client.send( net::Lobby::UnitAllocationPacket( allocated ).toPacket() );
         }
@@ -141,7 +142,8 @@ namespace client
         auto packetObj = net::Lobby::Packet::fromPacket( packet );
         if ( packetObj->id == net::Lobby::Id::Start )
         {
-            // todo
+            client.log( "Match started\n" );
+            controllerTransition( std::unique_ptr< ClientController >( new MatchClientController( client ) ) );
         }
     }
 }
