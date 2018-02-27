@@ -11,7 +11,7 @@ namespace server
             using ClientController::ClientController;
 
         protected:
-            virtual void onPacket( sf::Packet& packet );
+            virtual void onPacket( sf::Packet& packet ) override;
 
         private:
             bool verified = false;

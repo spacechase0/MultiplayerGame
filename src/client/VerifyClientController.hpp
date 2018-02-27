@@ -13,7 +13,7 @@ namespace client
             virtual void update() override;
 
         protected:
-            virtual void onPacket( sf::Packet& packet );
+            virtual void onPacket( sf::Packet& packet ) override;
 
         private:
             bool didFirstUpdate = false;

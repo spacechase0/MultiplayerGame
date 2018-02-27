@@ -17,10 +17,10 @@ namespace client
         public:
             LobbyClientController( Client& theClient );
 
-            virtual void update();
+            virtual void update() override;
 
         protected:
-            virtual void onPacket( sf::Packet& packet );
+            virtual void onPacket( sf::Packet& packet ) override;
 
             bool allocating = true;
 
