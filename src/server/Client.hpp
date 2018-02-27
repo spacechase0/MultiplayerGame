@@ -21,6 +21,7 @@ namespace server
 
             void send( sf::Packet packet );
 
+            const sf::Uint64 id;
             std::string username;
 
         private:

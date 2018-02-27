@@ -5,8 +5,11 @@
 
 namespace server
 {
+    sf::Uint64 clientIdCounter = 0;
+
     Client::Client( std::unique_ptr< sf::TcpSocket > theSocket )
-    :   socket( std::move( theSocket ) ),
+    :   id( clientIdCounter++ ),
+        socket( std::move( theSocket ) ),
         controller( new VerifyClientController( * this ) )
     {
     }
