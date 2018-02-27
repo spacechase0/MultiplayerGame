@@ -31,6 +31,8 @@ namespace server
             std::unique_ptr< sf::TcpSocket > socket;
             std::unique_ptr< ClientController > controller;
 
+            std::unique_ptr< ClientController > nextController;
+
             friend class ClientController;
     };
 }

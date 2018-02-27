@@ -22,4 +22,9 @@ namespace server
             pending = sf::Packet();
         }
     }
+
+    void ClientController::controllerTransition( std::unique_ptr< ClientController > newController )
+    {
+        client.nextController = std::move( newController );
+    }
 }

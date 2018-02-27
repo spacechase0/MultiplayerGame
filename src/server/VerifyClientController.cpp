@@ -7,6 +7,7 @@
 #include "net/Verify/ClientUsernamePacket.hpp"
 #include "server/Client.hpp"
 #include "server/Server.hpp"
+#include "server/LobbyClientController.hpp"
 
 namespace server
 {
@@ -34,6 +35,9 @@ namespace server
                 auto username = static_cast< net::Verify::ClientUsernamePacket* >( packetObj.get() );
                 client.username = username->username;
                 server.log( "Client $ is $\n", client.id, client.username );
+
+                client.send( net::Verify::ContinuePacket().toPacket() );
+                controllerTransition( std::unique_ptr< ClientController >( new LobbyClientController( server, client ) ) );
             }
         }
     }

@@ -33,7 +33,11 @@ namespace client
         running = true;
         while ( running )
         {
+            if ( nextController )
+                controller = std::move( nextController );
+
             controller->update();
+
             sf::sleep( sf::seconds( 1.f / 100 ) );
         }
     }

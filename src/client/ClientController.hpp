@@ -1,6 +1,7 @@
 #ifndef CLIENT_CLIENTCONTROLLER_HPP
 #define CLIENT_CLIENTCONTROLLER_HPP
 
+#include <memory>
 #include <SFML/Network/Packet.hpp>
 
 namespace client
@@ -19,6 +20,8 @@ namespace client
             Client& client;
 
             virtual void onPacket( sf::Packet& packet ) = 0;
+
+            void controllerTransition( std::unique_ptr< ClientController > newController );
 
         private:
             sf::Packet pending;

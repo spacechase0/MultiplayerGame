@@ -36,6 +36,9 @@ namespace server
 
     void Client::update()
     {
+        if ( nextController )
+            controller = std::move( nextController );
+
         if ( controller )
             controller->update();
     }
