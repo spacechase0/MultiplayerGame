@@ -5,6 +5,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "client/ClientController.hpp"
+#include "Constants.hpp"
 #include "game/Unit.hpp"
 
 namespace client
@@ -26,8 +27,8 @@ namespace client
             sf::RenderWindow window;
             sf::Font font;
 
-            int points = UNIT_POINTS;
-            std::map< game::UnitType, int > allocated;
+            unsigned int points = game::UNIT_POINTS;
+            std::map< game::UnitType, unsigned int > allocated;
     };
 }
 

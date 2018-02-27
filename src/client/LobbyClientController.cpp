@@ -5,6 +5,7 @@
 
 #include "client/Client.hpp"
 #include "Constants.hpp"
+#include "net/Lobby/UnitAllocationPacket.hpp"
 
 namespace client
 {
@@ -128,7 +129,7 @@ namespace client
         {
             client.log( "Done allocating units" );
             allocating = false;
-            // send packet
+            client.send( net::Lobby::UnitAllocationPacket( allocated ).toPacket() );
         }
 
         window.display();
@@ -136,5 +137,10 @@ namespace client
 
     void LobbyClientController::onPacket( sf::Packet& packet )
     {
+        auto packetObj = net::Lobby::Packet::fromPacket( packet );
+        if ( packetObj->id == net::Lobby::Id::Start )
+        {
+            // todo
+        }
     }
 }

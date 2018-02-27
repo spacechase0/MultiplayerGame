@@ -64,6 +64,12 @@
 		<Unit filename="net/Broadcast/SearchPacket.hpp" />
 		<Unit filename="net/Broadcast/ServerInfoPacket.cpp" />
 		<Unit filename="net/Broadcast/ServerInfoPacket.hpp" />
+		<Unit filename="net/Lobby/Packet.cpp" />
+		<Unit filename="net/Lobby/Packet.hpp" />
+		<Unit filename="net/Lobby/StartPacket.cpp" />
+		<Unit filename="net/Lobby/StartPacket.hpp" />
+		<Unit filename="net/Lobby/UnitAllocationPacket.cpp" />
+		<Unit filename="net/Lobby/UnitAllocationPacket.hpp" />
 		<Unit filename="net/PacketBase.hpp" />
 		<Unit filename="net/Verify/ClientUsernamePacket.cpp" />
 		<Unit filename="net/Verify/ClientUsernamePacket.hpp" />
