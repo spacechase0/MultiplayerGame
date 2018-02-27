@@ -1,5 +1,6 @@
 #include "server/Server.hpp"
 
+#include <SFML/Network/TcpSocket.hpp>
 #include <SFML/System/Lock.hpp>
 #include <SFML/System/Sleep.hpp>
 
@@ -28,13 +29,16 @@ namespace server
         if ( listener.accept( * client ) == sf::Socket::Done )
         {
             sf::Lock lock( clientsMutex );
-            clients.push_back( std::move( client ) );
+            clients.push_back( std::make_unique< Client >( std::move( client ) ) );
         }
     }
 
     void Server::main()
     {
+        for ( auto& client : clients )
+            client->update();
+
         while ( true )
-            sf::sleep( sf::seconds( 0.1f ) );
+            sf::sleep( sf::seconds( 1.f / 100 ) );
     }
 }

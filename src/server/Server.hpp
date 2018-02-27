@@ -3,12 +3,12 @@
 
 #include <memory>
 #include <SFML/Network/TcpListener.hpp>
-#include <SFML/Network/TcpSocket.hpp>
 #include <SFML/System/Mutex.hpp>
 #include <SFML/System/Thread.hpp>
 #include <string>
 #include <vector>
 
+#include "server/Client.hpp"
 #include "server/LanDiscovery.hpp"
 
 namespace server
@@ -30,7 +30,7 @@ namespace server
             void listen();
 
             sf::Mutex clientsMutex;
-            std::vector< std::unique_ptr< sf::TcpSocket > > clients;
+            std::vector< std::unique_ptr< Client > > clients;
 
             sf::Thread mainThread;
             void main();

@@ -66,10 +66,16 @@
 		<Unit filename="net/Verify/Packet.hpp" />
 		<Unit filename="net/Verify/VersionPacket.cpp" />
 		<Unit filename="net/Verify/VersionPacket.hpp" />
+		<Unit filename="server/Client.cpp" />
+		<Unit filename="server/Client.hpp" />
+		<Unit filename="server/ClientController.cpp" />
+		<Unit filename="server/ClientController.hpp" />
 		<Unit filename="server/LanDiscovery.cpp" />
 		<Unit filename="server/LanDiscovery.hpp" />
 		<Unit filename="server/Server.cpp" />
 		<Unit filename="server/Server.hpp" />
+		<Unit filename="server/VerifyClientController.cpp" />
+		<Unit filename="server/VerifyClientController.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
