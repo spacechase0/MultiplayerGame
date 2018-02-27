@@ -55,9 +55,7 @@ void runClient()
     std::cout << "Connected." << std::endl;
 
     client::Client client( std::move( socket ), username );
-
-    while ( true )
-        sf::sleep( sf::seconds( 0.1f ) );
+    client.run();
 }
 
 void runServer()

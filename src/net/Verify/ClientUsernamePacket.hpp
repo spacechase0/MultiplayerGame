@@ -12,6 +12,7 @@ namespace net
         {
             public:
                 ClientUsernamePacket();
+                ClientUsernamePacket( const std::string& theUsername );
 
                 std::string username;
 

@@ -11,6 +11,12 @@ namespace net
         {
         }
 
+        ClientUsernamePacket::ClientUsernamePacket( const std::string& theUsername )
+        :   Packet::Packet( Id::ClientUsername ),
+            username( theUsername )
+        {
+        }
+
         void ClientUsernamePacket::read( sf::Packet& packet )
         {
             packet >> username;

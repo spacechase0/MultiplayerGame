@@ -1,8 +1,8 @@
-#include "server/ClientController.hpp"
+#include "client/ClientController.hpp"
 
-#include "server/Client.hpp"
+#include "client/Client.hpp"
 
-namespace server
+namespace client
 {
     ClientController::ClientController( Client& theClient )
     :   client( theClient )
