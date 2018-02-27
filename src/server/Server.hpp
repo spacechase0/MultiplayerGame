@@ -21,6 +21,7 @@ namespace server
             void start();
 
             std::string name = "Game Server";
+            std::string password = "";
 
         private:
             LanDiscovery discovery;

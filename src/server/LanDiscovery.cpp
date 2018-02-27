@@ -1,17 +1,19 @@
 #include "server/LanDiscovery.hpp"
 
-#include "Constants.hpp"
-#include "net/Broadcast/SearchPacket.hpp"
-#include "net/Broadcast/ServerInfoPacket.hpp"
-
 #include <SFML/Network/Packet.hpp>
 #include <SFML/Network/UdpSocket.hpp>
 #include <SFML/System/Sleep.hpp>
 
+#include "Constants.hpp"
+#include "net/Broadcast/SearchPacket.hpp"
+#include "net/Broadcast/ServerInfoPacket.hpp"
+#include "server/Server.hpp"
+
 namespace server
 {
-    LanDiscovery::LanDiscovery()
-    :   thread( &LanDiscovery::impl, this )
+    LanDiscovery::LanDiscovery( Server& theServer )
+    :   server( theServer ),
+        thread( &LanDiscovery::impl, this )
     {
     }
 
@@ -60,9 +62,9 @@ namespace server
                 if ( packetObj && packetObj->id == net::Broadcast::Id::Search )
                 {
                     net::Broadcast::ServerInfoPacket info;
-                    info.name = "Server";
+                    info.name = server.name;
                     info.port = net::GAME_PORT;
-                    info.hasPassword = false;
+                    info.hasPassword = server.password != "";
 
                     sf::Packet send = info.toPacket();
 

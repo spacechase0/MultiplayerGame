@@ -9,19 +9,20 @@
 
 namespace server
 {
+    class Server;
+
     class LanDiscovery
     {
         public:
-            LanDiscovery();
+            LanDiscovery( Server& theServer );
             ~LanDiscovery();
-
-            std::string name = "Server";
-            bool hasPassword = false;
 
             void start();
             void stop();
 
         private:
+            Server& server;
+
             bool running = false;
             sf::Thread thread;
 

@@ -9,7 +9,8 @@
 namespace server
 {
     Server::Server()
-    :   listenThread( &Server::listen, this ),
+    :   discovery( * this ),
+        listenThread( &Server::listen, this ),
         mainThread( &Server::main, this )
     {
     }
