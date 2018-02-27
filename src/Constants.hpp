@@ -2,6 +2,12 @@
 #define CONSTANTS_HPP
 
 #include <SFML/Config.hpp>
+#include <SFML/System/Vector2.hpp>
+
+namespace sf
+{
+    typedef sf::Vector2< double > Vector2d;
+}
 
 namespace net
 {

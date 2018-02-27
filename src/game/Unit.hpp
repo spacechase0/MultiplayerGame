@@ -1,6 +1,8 @@
 #ifndef GAME_UNIT_HPP
 #define GAME_UNIT_HPP
 
+#include "Constants.hpp"
+
 namespace game
 {
     enum UnitType
@@ -17,6 +19,8 @@ namespace game
             Unit( UnitType theType );
 
             const UnitType type;
+
+            sf::Vector2d pos;
     };
 }
 
