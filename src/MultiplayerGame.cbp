@@ -56,6 +56,7 @@
 		<Unit filename="client/LobbyClientController.hpp" />
 		<Unit filename="client/VerifyClientController.cpp" />
 		<Unit filename="client/VerifyClientController.hpp" />
+		<Unit filename="game/Unit.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="net/Broadcast/Packet.cpp" />
 		<Unit filename="net/Broadcast/Packet.hpp" />

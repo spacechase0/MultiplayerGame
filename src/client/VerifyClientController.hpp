@@ -16,7 +16,8 @@ namespace client
             virtual void onPacket( sf::Packet& packet );
 
         private:
-            bool didFirstUpdate = false;;
+            bool didFirstUpdate = false;
+            bool sentUsername = false;
     };
 }
 

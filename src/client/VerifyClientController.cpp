@@ -1,6 +1,7 @@
 #include "client/VerifyClientController.hpp"
 
 #include "client/Client.hpp"
+#include "client/LobbyClientController.hpp"
 #include "Constants.hpp"
 #include "net/Verify/Packet.hpp"
 #include "net/Verify/VersionPacket.hpp"
@@ -25,8 +26,16 @@ namespace client
         auto packetObj = net::Verify::Packet::fromPacket( packet );
         if ( packetObj->id == net::Verify::Id::Continue )
         {
-            client.log( "Sending username...\n" );
-            client.send( net::Verify::ClientUsernamePacket( client.username ).toPacket() );
+            if ( sentUsername )
+            {
+                client.log( "Sending username...\n" );
+                client.send( net::Verify::ClientUsernamePacket( client.username ).toPacket() );
+            }
+            else
+            {
+                client.log( "Moving to lobby state\n" );
+                controllerTransition( std::unique_ptr< ClientController >( new LobbyClientController( client ) ) );
+            }
         }
     }
 }
