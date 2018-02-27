@@ -23,6 +23,7 @@ namespace client
 
     void LobbyClientController::update()
     {
+        ClientController::update();
         if ( !allocating )
         {
             window.close();

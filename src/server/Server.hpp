@@ -9,15 +9,18 @@
 #include <util/Logger.hpp>
 #include <vector>
 
-#include "server/Client.hpp"
 #include "server/LanDiscovery.hpp"
 
 namespace server
 {
+    class Client;
+    class Match;
+
     class Server
     {
         public:
             Server();
+            ~Server();
 
             void start();
 
@@ -29,12 +32,15 @@ namespace server
         private:
             LanDiscovery discovery;
 
+            bool listening = true;
             sf::TcpListener listener;
             sf::Thread listenThread;
             void listen();
 
             sf::Mutex clientsMutex;
             std::vector< std::unique_ptr< Client > > clients;
+
+            std::vector< std::unique_ptr< Match > > matches;
 
             sf::Thread mainThread;
             void main();

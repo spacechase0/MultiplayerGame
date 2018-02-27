@@ -23,6 +23,7 @@ namespace server
 
             virtual void onPacket( sf::Packet& packet ) = 0;
 
+            /// Use this instead of setController to avoid this object being destroyed immediately after use (potentially in the middle of a function)
             void controllerTransition( std::unique_ptr< ClientController > newController );
 
         private:

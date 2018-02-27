@@ -48,4 +48,9 @@ namespace server
     {
         socket->send( packet );
     }
+
+    void Client::setController( std::unique_ptr< ClientController > theController )
+    {
+        controller = std::move( theController );
+    }
 }

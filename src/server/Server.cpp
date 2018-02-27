@@ -5,6 +5,8 @@
 #include <SFML/System/Sleep.hpp>
 
 #include "Constants.hpp"
+#include "server/Client.hpp"
+#include "server/Match.hpp"
 
 namespace server
 {
@@ -13,6 +15,10 @@ namespace server
         discovery( * this ),
         listenThread( &Server::listen, this ),
         mainThread( &Server::main, this )
+    {
+    }
+
+    Server::~Server()
     {
     }
 
@@ -27,22 +33,46 @@ namespace server
     {
         listener.listen( net::GAME_PORT );
 
-        auto client = std::make_unique< sf::TcpSocket >();
-        if ( listener.accept( * client ) == sf::Socket::Done )
+        while ( listening )
         {
-            client->setBlocking( false );
-            sf::Lock lock( clientsMutex );
-            clients.push_back( std::make_unique< Client >( ( * this ), std::move( client ) ) );
+            auto client = std::make_unique< sf::TcpSocket >();
+            if ( listener.accept( * client ) == sf::Socket::Done )
+            {
+                client->setBlocking( false );
+                sf::Lock lock( clientsMutex );
+                clients.push_back( std::make_unique< Client >( ( * this ), std::move( client ) ) );
+            }
         }
     }
 
     void Server::main()
     {
-
         while ( true )
         {
-            for ( auto& client : clients )
-                client->update();
+            {
+                sf::Lock lock( clientsMutex );
+                bool ready = true;
+                for ( auto& client : clients )
+                {
+                    client->update();
+                    if ( client->units.size() == 0 )
+                        ready = false;
+                }
+
+                if ( ready && clients.size() >= 2 )
+                {
+                    listening = false;
+                    listener.close();
+                    discovery.stop();
+
+                    log( "Starting match" );
+                    auto match = std::make_unique< Match >( ( * this ), std::move( clients ) );
+                    matches.push_back( std::move( match ) );
+                }
+            }
+
+            for ( auto& match : matches )
+                match->update();
 
             sf::sleep( sf::seconds( 1.f / 100 ) );
         }

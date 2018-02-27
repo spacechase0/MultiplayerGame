@@ -21,11 +21,13 @@ namespace server
             ~Client();
 
             bool isConnected() const;
-            void disconnect( const std::string& reason = "");
+            void disconnect( const std::string& reason = "" );
 
             void update();
 
             void send( sf::Packet packet );
+
+            void setController( std::unique_ptr< ClientController > theController );
 
             const sf::Uint64 id;
             std::string username;

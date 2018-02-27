@@ -14,6 +14,8 @@ namespace net
 namespace game
 {
     constexpr int UNIT_POINTS = 10;
+    constexpr int WORLD_SPREAD = 500;
+    constexpr int ARMY_SPREAD = 50;
 }
 
 #endif // CONSTANTS_HPP
