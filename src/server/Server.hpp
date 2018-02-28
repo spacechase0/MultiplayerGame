@@ -29,6 +29,9 @@ namespace server
 
             util::Logger log;
 
+            std::vector< Client* > getClients();
+            std::vector< const Client* > getClients() const;
+
         private:
             LanDiscovery discovery;
 

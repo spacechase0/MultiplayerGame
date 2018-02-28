@@ -23,6 +23,7 @@ namespace client
             void run();
             void stop();
 
+            sf::Uint64 id;
             const std::string username;
 
             util::Logger log;

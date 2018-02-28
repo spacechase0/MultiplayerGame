@@ -29,6 +29,22 @@ namespace server
         mainThread.launch();
     }
 
+    std::vector< Client* > Server::getClients()
+    {
+        std::vector< Client* > ret;
+        for ( auto& client : clients )
+            ret.push_back( client.get() );
+        return ret;
+    }
+
+    std::vector< const Client* > Server::getClients() const
+    {
+        std::vector< const Client* > ret;
+        for ( auto& client : clients )
+            ret.push_back( client.get() );
+        return ret;
+    }
+
     void Server::listen()
     {
         listener.listen( net::GAME_PORT );

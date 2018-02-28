@@ -36,7 +36,8 @@ namespace server
 
         for ( auto& client : clients )
         {
-            client->send( net::Lobby::StartPacket().toPacket() );
+            client->currentMatch = this;
+            client->send( net::Lobby::StartPacket( client->id ).toPacket() );
             client->setController( std::unique_ptr< ClientController >( new MatchClientController( server, ( * client ) ) ) );
         }
     }
@@ -47,5 +48,21 @@ namespace server
 
     void Match::update()
     {
+    }
+
+    std::vector< Client* > Match::getClients()
+    {
+        std::vector< Client* > ret;
+        for ( auto& client : clients )
+            ret.push_back( client.get() );
+        return ret;
+    }
+
+    std::vector< const Client* > Match::getClients() const
+    {
+        std::vector< const Client* > ret;
+        for ( auto& client : clients )
+            ret.push_back( client.get() );
+        return ret;
     }
 }

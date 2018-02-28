@@ -17,6 +17,9 @@ namespace server
 
             void update();
 
+            std::vector< Client* > getClients();
+            std::vector< const Client* > getClients() const;
+
         private:
             Server& server;
             std::vector< std::unique_ptr< Client > > clients;

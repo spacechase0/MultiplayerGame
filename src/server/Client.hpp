@@ -12,6 +12,7 @@ namespace game
 namespace server
 {
     class ClientController;
+    class Match;
     class Server;
 
     class Client
@@ -33,6 +34,8 @@ namespace server
             std::string username;
 
             std::vector< std::unique_ptr< game::Unit > > units;
+
+            Match* currentMatch = nullptr;
 
         private:
             Server& server;

@@ -8,9 +8,11 @@ namespace server
     class MatchClientController : public ClientController
     {
         public:
-            using ClientController::ClientController;
+            MatchClientController( Server& theServer, Client& theClient );
 
             virtual void update() override;
+
+            void sync();
 
         protected:
             virtual void onPacket( sf::Packet& packet ) override;

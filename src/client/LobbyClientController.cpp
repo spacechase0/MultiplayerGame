@@ -7,6 +7,7 @@
 #include "client/MatchClientController.hpp"
 #include "Constants.hpp"
 #include "net/Lobby/UnitAllocationPacket.hpp"
+#include "net/Lobby/StartPacket.hpp"
 
 namespace client
 {
@@ -142,7 +143,9 @@ namespace client
         auto packetObj = net::Lobby::Packet::fromPacket( packet );
         if ( packetObj->id == net::Lobby::Id::Start )
         {
+            auto start = static_cast< net::Lobby::StartPacket* >( packetObj.get() );
             client.log( "Match started\n" );
+            client.id = start->id;
             controllerTransition( std::unique_ptr< ClientController >( new MatchClientController( client ) ) );
         }
     }

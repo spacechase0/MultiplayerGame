@@ -11,6 +11,9 @@ namespace net
         {
             public:
                 StartPacket();
+                StartPacket( sf::Uint64 theId );
+
+                sf::Uint64 id; ///< The ID of the client that this is being sent to.
 
                 virtual void read( sf::Packet& packet ) override;
                 virtual void write( sf::Packet& packet ) const override;
