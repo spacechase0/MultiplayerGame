@@ -21,6 +21,7 @@ namespace game
             const UnitType type;
 
             sf::Vector2d pos;
+            int health;
     };
 }
 
