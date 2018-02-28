@@ -19,14 +19,14 @@ namespace server
         int i = 0;
         for ( auto& client : clients )
         {
-            int sec = 2 * util::PI / clients.size() * i++;
+            double sec = 2 * util::PI / clients.size() * i++;
             double baseX = std::cos( sec ) * game::WORLD_SPREAD;
             double baseY = std::sin( sec ) * game::WORLD_SPREAD;
 
             int j = 0;
             for ( auto& unit : client->units )
             {
-                int sec = 2 * util::PI / client->units.size() * j++;
+                double sec = 2 * util::PI / client->units.size() * j++;
                 double armyX = std::cos( sec ) * game::ARMY_SPREAD;
                 double armyY = std::sin( sec ) * game::ARMY_SPREAD;
 
