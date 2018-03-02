@@ -47,7 +47,13 @@ namespace client
             {
                 sf::CircleShape circle;
                 circle.setRadius( 8 );
-                circle.setFillColor( sf::Color::White );
+                switch ( unit->type )
+                {
+                    case game::UnitType::Fighter: circle.setFillColor( sf::Color( 200, 0, 0 ) ); break;
+                    case game::UnitType::Mage: circle.setFillColor( sf::Color::Blue ); break;
+                    case game::UnitType::Archer: circle.setFillColor( sf::Color::Green ); break;
+                    default: circle.setFillColor( sf::Color::White );
+                }
                 circle.setOutlineColor( sf::Color::Black );
                 if ( army.first != client.id )
                     circle.setOutlineColor( sf::Color::Red );
@@ -55,6 +61,14 @@ namespace client
                 circle.setOrigin( sf::Vector2f( 8, 8 ) );
                 circle.setPosition( unit->pos.x, unit->pos.y );
                 window.draw( circle );
+
+                if ( unit.get() == selected )
+                {
+                    circle.setRadius( 12 );
+                    circle.setFillColor( sf::Color::Transparent );
+                    circle.setOutlineColor( sf::Color::Yellow );
+                    window.draw( circle );
+                }
             }
         window.display();
     }

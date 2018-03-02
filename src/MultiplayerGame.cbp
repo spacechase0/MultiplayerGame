@@ -73,6 +73,8 @@
 		<Unit filename="net/Lobby/StartPacket.hpp" />
 		<Unit filename="net/Lobby/UnitAllocationPacket.cpp" />
 		<Unit filename="net/Lobby/UnitAllocationPacket.hpp" />
+		<Unit filename="net/Match/CurrentTurnPacket.cpp" />
+		<Unit filename="net/Match/CurrentTurnPacket.hpp" />
 		<Unit filename="net/Match/GameDataPacket.cpp" />
 		<Unit filename="net/Match/GameDataPacket.hpp" />
 		<Unit filename="net/Match/Packet.cpp" />
