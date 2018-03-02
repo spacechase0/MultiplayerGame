@@ -7,6 +7,7 @@
 
 #include "client/Client.hpp"
 #include "Constants.hpp"
+#include "net/Match/CommandPacket.hpp"
 #include "net/Match/CurrentTurnPacket.hpp"
 #include "net/Match/GameDataPacket.hpp"
 #include "net/Match/Packet.hpp"
@@ -72,6 +73,18 @@ namespace client
                             mousePos.x /= game::WORLD_UNIT_SIZE;
                             mousePos.y /= game::WORLD_UNIT_SIZE;
                             selected->moveTo( mousePos );
+
+                            auto it = army.begin();
+                            for ( ; it != army.end(); ++it )
+                                if ( it->get() == selected )
+                                    break;
+                            int unitId = it - army.begin();
+
+                            net::Match::CommandPacket cmd;
+                            cmd.type = net::Match::CommandPacket::Move;
+                            cmd.withUnit = unitId;
+                            cmd.pos = mousePos;
+                            client.send( cmd.toPacket() );
 
                             if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
                             {
@@ -189,10 +202,25 @@ namespace client
         }
         else if ( packetObj->id == net::Match::Id::CurrentTurn )
         {
-            auto data = static_cast< net::Match::CurrentTurnPacket* >( packetObj.get() );
+            auto turn = static_cast< net::Match::CurrentTurnPacket* >( packetObj.get() );
 
-            client.log( "Current turn: $\n", users[ data->current ] );
-            currentTurn = data->current;
+            client.log( "Current turn: $\n", users[ turn->current ] );
+            currentTurn = turn->current;
+        }
+        else if ( packetObj->id == net::Match::Id::Command )
+        {
+            auto cmd = static_cast< net::Match::CommandPacket* >( packetObj.get() );
+            switch ( cmd->type )
+            {
+                case net::Match::CommandPacket::Move:
+                    client.log( "Moving unit $ towards ($, $)\n", static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
+                    armies[ currentTurn ][ cmd->withUnit ]->moveTo( cmd->pos );
+                    break;
+                case net::Match::CommandPacket::Attack:
+                    client.log( "Attacking with unit $ at ($, $)\n", static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
+                    /* TODO */
+                    break;
+            }
         }
     }
 }

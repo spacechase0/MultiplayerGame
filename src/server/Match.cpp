@@ -52,6 +52,8 @@ namespace server
 
     void Match::update()
     {
+        for ( auto& client : clients )
+            client->update();
     }
 
     std::vector< Client* > Match::getClients()
@@ -68,5 +70,10 @@ namespace server
         for ( auto& client : clients )
             ret.push_back( client.get() );
         return ret;
+    }
+
+    sf::Uint64 Match::getCurrentTurn() const
+    {
+        return turns.front();
     }
 }

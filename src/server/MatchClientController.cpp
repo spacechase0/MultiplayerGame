@@ -1,5 +1,6 @@
 #include "server/MatchClientController.hpp"
 
+#include "net/Match/CommandPacket.hpp"
 #include "net/Match/GameDataPacket.hpp"
 #include "server/Client.hpp"
 #include "server/Match.hpp"
@@ -39,5 +40,29 @@ namespace server
 
     void MatchClientController::onPacket( sf::Packet& packet )
     {
+        auto packetObj = net::Match::Packet::fromPacket( packet );
+        if ( packetObj->id == net::Match::Command )
+        {
+            auto cmd = static_cast< net::Match::CommandPacket* >( packetObj.get() );
+            if ( client.currentMatch->getCurrentTurn() != client.id )
+                return;
+
+            switch ( cmd->type )
+            {
+                case net::Match::CommandPacket::Move:
+                    server.log( "$ moved unit $ to ($, $)\n", client.username, static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
+                    client.units[ cmd->withUnit ]->moveTo( cmd->pos );
+                    break;
+
+                case net::Match::CommandPacket::Attack:
+                    server.log( "$ attacked with unit $ at ($, $)\n", client.username, static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
+                    // TODO
+                    break;
+            }
+
+            for ( auto& otherClient : client.currentMatch->getClients() )
+                if ( otherClient != &client )
+                    otherClient->send( cmd->toPacket() );
+        }
     }
 }

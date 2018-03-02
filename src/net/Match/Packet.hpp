@@ -14,6 +14,7 @@ namespace net
         {
             GameData = 0,
             CurrentTurn,
+            Command,
         };
 
         class Packet : public PacketBase< Id >
