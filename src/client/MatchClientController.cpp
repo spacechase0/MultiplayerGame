@@ -2,6 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/Text.hpp>
 #include <util/Math.hpp>
 
 #include "client/Client.hpp"
@@ -16,6 +17,7 @@ namespace client
     :   ClientController::ClientController( theClient )
     {
         window.create( sf::VideoMode( 640, 480 ), "Game" );
+        font.loadFromFile( "C:\\Windows\\Fonts\\arial.ttf" );
         view = window.getDefaultView();
     }
 
@@ -41,43 +43,46 @@ namespace client
             }
             else if ( event.type == sf::Event::MouseButtonPressed )
             {
-                auto& army = armies[ client.id ];
-                if ( event.mouseButton.button == sf::Mouse::Left )
+                if ( currentTurn == client.id )
                 {
-                    if ( mouseMode == Select )
+                    auto& army = armies[ client.id ];
+                    if ( event.mouseButton.button == sf::Mouse::Left )
                     {
-                        bool newSel = false;
-                        for ( auto& unit : army )
+                        if ( mouseMode == Select )
                         {
-                            if ( unit.get() == selected )
-                                continue;
-
-                            if ( util::distance( unit->pos * game::WORLD_UNIT_SIZE, sf::Vector2d( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) ) ) <= 10 )
+                            bool newSel = false;
+                            for ( auto& unit : army )
                             {
-                                newSel = true;
-                                selected = unit.get();
+                                if ( unit.get() == selected )
+                                    continue;
+
+                                if ( util::distance( unit->pos * game::WORLD_UNIT_SIZE, sf::Vector2d( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) ) ) <= 10 )
+                                {
+                                    newSel = true;
+                                    selected = unit.get();
+                                }
+                            }
+
+                            if ( !newSel )
+                                selected = nullptr;
+                        }
+                        else if ( mouseMode == Move )
+                        {
+                            sf::Vector2d mousePos( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) );
+                            mousePos.x /= game::WORLD_UNIT_SIZE;
+                            mousePos.y /= game::WORLD_UNIT_SIZE;
+                            selected->moveTo( mousePos );
+
+                            if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
+                            {
+                                mouseMode = Select;
+                                selected = nullptr;
                             }
                         }
-
-                        if (  !newSel )
-                            selected = nullptr;
-                    }
-                    else if ( mouseMode == Move )
-                    {
-                        sf::Vector2d mousePos( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) );
-                        mousePos.x /= game::WORLD_UNIT_SIZE;
-                        mousePos.y /= game::WORLD_UNIT_SIZE;
-                        selected->moveTo( mousePos );
-
-                        if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
+                        else if ( mouseMode == Attack )
                         {
-                            mouseMode = Select;
-                            selected = nullptr;
+                            // TODO
                         }
-                    }
-                    else if ( mouseMode == Attack )
-                    {
-                        // TODO
                     }
                 }
             }
@@ -145,6 +150,16 @@ namespace client
                     }
                 }
             }
+
+        window.setView( sf::View( sf::FloatRect( 0, 0, window.getSize().x, window.getSize().y ) ) );
+        sf::Text text;
+        text.setFont( font );
+        text.setCharacterSize( 20 );
+        text.setString( util::format( "Current turn: $", users[ currentTurn ] ) );
+        text.setPosition( 15, 15 );
+        text.setFillColor( sf::Color::Black );
+        window.draw( text );
+
         window.display();
     }
 
@@ -177,6 +192,7 @@ namespace client
             auto data = static_cast< net::Match::CurrentTurnPacket* >( packetObj.get() );
 
             client.log( "Current turn: $\n", users[ data->current ] );
+            currentTurn = data->current;
         }
     }
 }
