@@ -13,6 +13,7 @@ namespace net
         enum Id : sf::Uint8
         {
             GameData = 0,
+            CurrentTurn,
         };
 
         class Packet : public PacketBase< Id >

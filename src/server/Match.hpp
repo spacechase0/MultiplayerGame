@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <vector>
+#include <queue>
+#include <SFML/Config.hpp>
 
 namespace server
 {
@@ -23,6 +25,8 @@ namespace server
         private:
             Server& server;
             std::vector< std::unique_ptr< Client > > clients;
+
+            std::queue< sf::Uint64 > turns;
 
             friend class Server;
     };

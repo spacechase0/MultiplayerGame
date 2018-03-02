@@ -29,6 +29,8 @@ namespace client
 
             std::map< sf::Uint64, std::string > users;
             std::map< sf::Uint64, std::vector< std::unique_ptr< game::Unit > > > armies;
+
+            sf::Uint64 currentTurn;
     };
 }
 

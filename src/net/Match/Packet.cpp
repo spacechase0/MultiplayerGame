@@ -3,6 +3,7 @@
 #include <SFML/Network/Packet.hpp>
 
 #include "net/Match/GameDataPacket.hpp"
+#include "net/Match/CurrentTurnPacket.hpp"
 
 namespace net
 {
@@ -25,6 +26,7 @@ namespace net
             switch ( static_cast< Id >( id ) )
             {
                 case GameData: packetObj.reset( new GameDataPacket() ); break;
+                case CurrentTurn: packetObj.reset( new CurrentTurnPacket() ); break;
             }
 
             if ( packetObj )

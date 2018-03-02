@@ -7,6 +7,7 @@
 #include "Constants.hpp"
 #include "game/Unit.hpp"
 #include "net/Lobby/StartPacket.hpp"
+#include "net/Match/CurrentTurnPacket.hpp"
 #include "server/Client.hpp"
 #include "server/MatchClientController.hpp"
 
@@ -32,6 +33,8 @@ namespace server
 
                 unit->pos = sf::Vector2d( baseX + armyX, baseY + armyY );
             }
+
+            turns.push( client->id );
         }
 
         for ( auto& client : clients )
@@ -39,6 +42,7 @@ namespace server
             client->currentMatch = this;
             client->send( net::Lobby::StartPacket( client->id ).toPacket() );
             client->setController( std::unique_ptr< ClientController >( new MatchClientController( server, ( * client ) ) ) );
+            client->send( net::Match::CurrentTurnPacket( turns.front() ).toPacket() );
         }
     }
 

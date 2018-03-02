@@ -5,6 +5,7 @@
 
 #include "client/Client.hpp"
 #include "Constants.hpp"
+#include "net/Match/CurrentTurnPacket.hpp"
 #include "net/Match/GameDataPacket.hpp"
 #include "net/Match/Packet.hpp"
 
@@ -81,6 +82,12 @@ namespace client
 
                     armies[ army.first ].push_back( std::move( unit ) );
                 }
+        }
+        else if ( packetObj->id == net::Match::Id::CurrentTurn )
+        {
+            auto data = static_cast< net::Match::CurrentTurnPacket* >( packetObj.get() );
+
+            client.log( "Current turn: $\n", users[ data->current ] );
         }
     }
 }
