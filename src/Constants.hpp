@@ -20,8 +20,10 @@ namespace net
 namespace game
 {
     constexpr int UNIT_POINTS = 10;
-    constexpr int WORLD_SPREAD = 500;
-    constexpr int ARMY_SPREAD = 50;
+
+    constexpr double WORLD_UNIT_SIZE = 16;
+    constexpr int WORLD_SPREAD = 30;
+    constexpr int ARMY_SPREAD = 3;
 }
 
 #endif // CONSTANTS_HPP

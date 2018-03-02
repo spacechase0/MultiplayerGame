@@ -30,6 +30,13 @@ namespace client
             std::map< sf::Uint64, std::string > users;
             std::map< sf::Uint64, std::vector< std::unique_ptr< game::Unit > > > armies;
 
+            enum MouseMode
+            {
+                Select,
+                Move,
+                Attack,
+            } mouseMode = Select;
+
             game::Unit* selected = nullptr;
 
             sf::Uint64 currentTurn;

@@ -22,6 +22,13 @@ namespace game
 
             sf::Vector2d pos;
             int health;
+
+            double getMovementSpeedLeft() const;
+            void useMovementSpeed( double amount );
+            void moveTo( sf::Vector2d worldPos );
+
+        private:
+            double movement = 5;
     };
 }
 

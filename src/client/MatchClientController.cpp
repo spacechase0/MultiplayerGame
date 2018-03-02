@@ -2,6 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <util/Math.hpp>
 
 #include "client/Client.hpp"
 #include "Constants.hpp"
@@ -29,7 +30,61 @@ namespace client
             {
                 view = sf::View( view.getCenter(), sf::Vector2f( event.size.width, event.size.height ) );
             }
+            else if ( event.type == sf::Event::KeyPressed )
+            {
+                if ( event.key.code == sf::Keyboard::Z )
+                    mouseMode = Select;
+                else if ( event.key.code == sf::Keyboard::X )
+                    mouseMode = Move;
+                else if ( event.key.code == sf::Keyboard::C )
+                    mouseMode = Attack;
+            }
+            else if ( event.type == sf::Event::MouseButtonPressed )
+            {
+                auto& army = armies[ client.id ];
+                if ( event.mouseButton.button == sf::Mouse::Left )
+                {
+                    if ( mouseMode == Select )
+                    {
+                        bool newSel = false;
+                        for ( auto& unit : army )
+                        {
+                            if ( unit.get() == selected )
+                                continue;
+
+                            if ( util::distance( unit->pos * game::WORLD_UNIT_SIZE, sf::Vector2d( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) ) ) <= 10 )
+                            {
+                                newSel = true;
+                                selected = unit.get();
+                            }
+                        }
+
+                        if (  !newSel )
+                            selected = nullptr;
+                    }
+                    else if ( mouseMode == Move )
+                    {
+                        sf::Vector2d mousePos( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) );
+                        mousePos.x /= game::WORLD_UNIT_SIZE;
+                        mousePos.y /= game::WORLD_UNIT_SIZE;
+                        selected->moveTo( mousePos );
+
+                        if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
+                        {
+                            mouseMode = Select;
+                            selected = nullptr;
+                        }
+                    }
+                    else if ( mouseMode == Attack )
+                    {
+                        // TODO
+                    }
+                }
+            }
         }
+
+        if ( selected == nullptr || ( mouseMode == Move && selected->getMovementSpeedLeft() == 0 ) )
+            mouseMode = Select;
 
         if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )
             view.move( 0, -4 );
@@ -59,15 +114,26 @@ namespace client
                     circle.setOutlineColor( sf::Color::Red );
                 circle.setOutlineThickness( 2 );
                 circle.setOrigin( sf::Vector2f( 8, 8 ) );
-                circle.setPosition( unit->pos.x, unit->pos.y );
+                circle.setPosition( unit->pos.x * game::WORLD_UNIT_SIZE, unit->pos.y * game::WORLD_UNIT_SIZE );
                 window.draw( circle );
 
                 if ( unit.get() == selected )
                 {
                     circle.setRadius( 12 );
+                    circle.setOrigin( sf::Vector2f( 12, 12 ) );
                     circle.setFillColor( sf::Color::Transparent );
                     circle.setOutlineColor( sf::Color::Yellow );
                     window.draw( circle );
+
+                    if ( mouseMode == Move )
+                    {
+                        circle.setRadius( selected->getMovementSpeedLeft() * game::WORLD_UNIT_SIZE );
+                        circle.setOrigin( selected->getMovementSpeedLeft() * game::WORLD_UNIT_SIZE, selected->getMovementSpeedLeft() * game::WORLD_UNIT_SIZE );
+                        circle.setFillColor( sf::Color( 0, 255, 0, 64 ) );
+                        circle.setOutlineThickness( 3 );
+                        circle.setOutlineColor( sf::Color( 0, 255, 0, 192 ) );
+                        window.draw( circle );
+                    }
                 }
             }
         window.display();
