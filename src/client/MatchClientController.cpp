@@ -134,6 +134,15 @@ namespace client
                         circle.setOutlineColor( sf::Color( 0, 255, 0, 192 ) );
                         window.draw( circle );
                     }
+                    else if ( mouseMode == Attack )
+                    {
+                        circle.setRadius( selected->getAttackRange() * game::WORLD_UNIT_SIZE );
+                        circle.setOrigin( selected->getAttackRange() * game::WORLD_UNIT_SIZE, selected->getAttackRange() * game::WORLD_UNIT_SIZE );
+                        circle.setFillColor( sf::Color( 255, 00, 0, 64 ) );
+                        circle.setOutlineThickness( 3 );
+                        circle.setOutlineColor( sf::Color( 255, 0, 0, 192 ) );
+                        window.draw( circle );
+                    }
                 }
             }
         window.display();

@@ -29,4 +29,9 @@ namespace game
         pos.y += std::sin( angle ) * dist;
         useMovementSpeed( dist );
     }
+
+    double Unit::getAttackRange() const
+    {
+        return 2;
+    }
 }

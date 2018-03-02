@@ -27,6 +27,8 @@ namespace game
             void useMovementSpeed( double amount );
             void moveTo( sf::Vector2d worldPos );
 
+            double getAttackRange() const;
+
         private:
             double movement = 5;
     };
