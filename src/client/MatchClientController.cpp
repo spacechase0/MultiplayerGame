@@ -108,7 +108,7 @@ namespace client
             }
         }
 
-        if ( selected == nullptr || ( mouseMode == Move && selected->getMovementSpeedLeft() == 0 ) )
+        if ( selected == nullptr || ( mouseMode == Move && selected->getMovementSpeedLeft() == 0 ) || ( mouseMode == Attack && selected->hasAttacked() ) )
             mouseMode = Select;
 
         if ( sf::Keyboard::isKeyPressed( sf::Keyboard::W ) )

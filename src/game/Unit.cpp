@@ -19,6 +19,9 @@ namespace game
 
     void Unit::reset()
     {
+        if ( health <= 0 )
+            return;
+
         attacked = false;
         movement = getMovementSpeedPerTurn();
     }
@@ -45,11 +48,14 @@ namespace game
 
     void Unit::useMovementSpeed( double amount )
     {
-        //movement -= amount;
+        movement -= amount;
     }
 
     void Unit::moveTo( IWorldView* world, sf::Vector2d worldPos )
     {
+        if ( health <= 0 )
+            return;
+
         double angle = std::atan2( worldPos.y - pos.y, worldPos.x - pos.x );
         double dist = std::min( util::distance( pos, worldPos ), getMovementSpeedLeft() );
         pos.x += std::cos( angle ) * dist;
@@ -77,8 +83,11 @@ namespace game
 
     void Unit::attack( IWorldView* world, sf::Vector2d worldPos )
     {
+        if ( health <= 0 )
+            return;
         if ( attacked )
             return;
+        attacked = true;
 
         double angle = std::atan2( worldPos.y - pos.y, worldPos.x - pos.x );
         double dist = std::min( util::distance( pos, worldPos ), getMovementSpeedLeft() );
@@ -105,7 +114,6 @@ namespace game
                 // todo
                 break;
         }
-
 
         if ( movement != getMovementSpeedPerTurn() )
             movement = 0;
