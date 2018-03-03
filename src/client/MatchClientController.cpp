@@ -2,6 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <util/Math.hpp>
 
@@ -11,6 +12,13 @@
 #include "net/Match/CurrentTurnPacket.hpp"
 #include "net/Match/GameDataPacket.hpp"
 #include "net/Match/Packet.hpp"
+
+namespace
+{
+    constexpr float UNIT_OUTLINE = 2;
+    constexpr float HEALTHBAR_WIDTH = game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE + UNIT_OUTLINE * 2;
+    constexpr float HEALTHBAR_HEIGHT = 4;
+}
 
 namespace client
 {
@@ -67,12 +75,15 @@ namespace client
                             if ( !newSel )
                                 selected = nullptr;
                         }
-                        else if ( mouseMode == Move )
+                        else if ( mouseMode == Move || mouseMode == Attack )
                         {
                             sf::Vector2d mousePos( window.mapPixelToCoords( sf::Vector2i( event.mouseButton.x, event.mouseButton.y ), view ) );
                             mousePos.x /= game::WORLD_UNIT_SIZE;
                             mousePos.y /= game::WORLD_UNIT_SIZE;
-                            selected->moveTo( mousePos );
+                            if ( mouseMode == Move )
+                                selected->moveTo( this, mousePos );
+                            else
+                                selected->attack( this, mousePos );
 
                             auto it = army.begin();
                             for ( ; it != army.end(); ++it )
@@ -81,20 +92,16 @@ namespace client
                             int unitId = it - army.begin();
 
                             net::Match::CommandPacket cmd;
-                            cmd.type = net::Match::CommandPacket::Move;
+                            cmd.type = mouseMode == Move ? net::Match::CommandPacket::Move : net::Match::CommandPacket::Attack;
                             cmd.withUnit = unitId;
                             cmd.pos = mousePos;
                             client.send( cmd.toPacket() );
 
-                            if ( !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
+                            if ( mouseMode == Attack || !sf::Keyboard::isKeyPressed( sf::Keyboard::LShift ) && !sf::Keyboard::isKeyPressed( sf::Keyboard::RShift ) )
                             {
                                 mouseMode = Select;
                                 selected = nullptr;
                             }
-                        }
-                        else if ( mouseMode == Attack )
-                        {
-                            // TODO
                         }
                     }
                 }
@@ -118,8 +125,11 @@ namespace client
         for ( const auto& army : armies )
             for ( const auto& unit : army.second )
             {
+                if ( unit->health <= 0 )
+                    return;
+
                 sf::CircleShape circle;
-                circle.setRadius( 8 );
+                circle.setRadius( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2 );
                 switch ( unit->type )
                 {
                     case game::UnitType::Fighter: circle.setFillColor( sf::Color( 200, 0, 0 ) ); break;
@@ -130,15 +140,35 @@ namespace client
                 circle.setOutlineColor( sf::Color::Black );
                 if ( army.first != client.id )
                     circle.setOutlineColor( sf::Color::Red );
-                circle.setOutlineThickness( 2 );
-                circle.setOrigin( sf::Vector2f( 8, 8 ) );
+                circle.setOutlineThickness( UNIT_OUTLINE );
+                circle.setOrigin( sf::Vector2f( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2,
+                                                game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2 ) );
                 circle.setPosition( unit->pos.x * game::WORLD_UNIT_SIZE, unit->pos.y * game::WORLD_UNIT_SIZE );
                 window.draw( circle );
 
+                if ( unit->health != unit->getMaxHealth() )
+                {
+                    sf::RectangleShape rect;
+                    rect.setFillColor( sf::Color::Red );
+                    rect.setOutlineColor( sf::Color::Red );
+                    rect.setOutlineThickness( 1 );
+                    rect.setSize( sf::Vector2f( HEALTHBAR_WIDTH, HEALTHBAR_HEIGHT ) );
+                    rect.setPosition( circle.getPosition().x - game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2 - UNIT_OUTLINE,
+                                      circle.getPosition().y - game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE - UNIT_OUTLINE - HEALTHBAR_HEIGHT - 2 );
+                    window.draw( rect );
+
+                    float perc = unit->health / static_cast< float >( unit->getMaxHealth() );
+                    rect.setSize( sf::Vector2f( HEALTHBAR_WIDTH * perc, HEALTHBAR_HEIGHT ) );
+                    rect.setFillColor( sf::Color::Green );
+                    rect.setOutlineThickness( 0 );
+                    window.draw( rect );
+                }
+
                 if ( unit.get() == selected )
                 {
-                    circle.setRadius( 12 );
-                    circle.setOrigin( sf::Vector2f( 12, 12 ) );
+                    circle.setRadius( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE * 1.5f );
+                    circle.setOrigin( sf::Vector2f( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE * 1.5f,
+                                                    game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE * 1.5f ) );
                     circle.setFillColor( sf::Color::Transparent );
                     circle.setOutlineColor( sf::Color::Yellow );
                     window.draw( circle );
@@ -174,6 +204,16 @@ namespace client
         window.draw( text );
 
         window.display();
+    }
+
+    std::vector< game::Unit* > MatchClientController::getUnitsAt( sf::Vector2d pos )
+    {
+        std::vector< game::Unit* > ret;
+        for ( auto& army : armies )
+            for ( auto& unit : army.second )
+                if ( util::distance( unit->pos, pos ) < game::ARMY_UNIT_SIZE )
+                    ret.push_back( unit.get() );
+        return ret;
     }
 
     void MatchClientController::onPacket( sf::Packet& packet )
@@ -214,11 +254,11 @@ namespace client
             {
                 case net::Match::CommandPacket::Move:
                     client.log( "Moving unit $ towards ($, $)\n", static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
-                    armies[ currentTurn ][ cmd->withUnit ]->moveTo( cmd->pos );
+                    armies[ currentTurn ][ cmd->withUnit ]->moveTo( this, cmd->pos );
                     break;
                 case net::Match::CommandPacket::Attack:
                     client.log( "Attacking with unit $ at ($, $)\n", static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
-                    /* TODO */
+                    armies[ currentTurn ][ cmd->withUnit ]->attack( this, cmd->pos );
                     break;
             }
         }

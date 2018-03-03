@@ -51,12 +51,12 @@ namespace server
             {
                 case net::Match::CommandPacket::Move:
                     server.log( "$ moved unit $ to ($, $)\n", client.username, static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
-                    client.units[ cmd->withUnit ]->moveTo( cmd->pos );
+                    client.units[ cmd->withUnit ]->moveTo( client.currentMatch, cmd->pos );
                     break;
 
                 case net::Match::CommandPacket::Attack:
                     server.log( "$ attacked with unit $ at ($, $)\n", client.username, static_cast< int >( cmd->withUnit ), cmd->pos.x, cmd->pos.y );
-                    // TODO
+                    client.units[ cmd->withUnit ]->attack( client.currentMatch, cmd->pos );
                     break;
             }
 

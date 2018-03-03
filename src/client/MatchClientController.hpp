@@ -10,16 +10,19 @@
 #include <string>
 
 #include "client/ClientController.hpp"
+#include "game/IWorldView.hpp"
 #include "game/Unit.hpp"
 
 namespace client
 {
-    class MatchClientController : public ClientController
+    class MatchClientController : public ClientController, public game::IWorldView
     {
         public:
             MatchClientController( Client& theClient );
 
             virtual void update() override;
+
+            virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
 
         protected:
             virtual void onPacket( sf::Packet& packet ) override;

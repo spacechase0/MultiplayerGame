@@ -76,4 +76,14 @@ namespace server
     {
         return turns.front();
     }
+
+    std::vector< game::Unit* > Match::getUnitsAt( sf::Vector2d pos )
+    {
+        std::vector< game::Unit* > ret;
+        for ( auto& client : clients )
+            for ( auto& unit : client->units )
+                if ( util::distance( unit->pos, pos ) < game::ARMY_UNIT_SIZE )
+                    ret.push_back( unit.get() );
+        return ret;
+    }
 }

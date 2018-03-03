@@ -6,12 +6,14 @@
 #include <queue>
 #include <SFML/Config.hpp>
 
+#include "game/IWorldView.hpp"
+
 namespace server
 {
     class Client;
     class Server;
 
-    class Match
+    class Match : public game::IWorldView
     {
         public:
             Match( Server& theServer, std::vector< std::unique_ptr< Client > > theClients );
@@ -23,6 +25,8 @@ namespace server
             std::vector< const Client* > getClients() const;
 
             sf::Uint64 getCurrentTurn() const;
+
+            virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
 
         private:
             Server& server;

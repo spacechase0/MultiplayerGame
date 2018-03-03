@@ -5,6 +5,8 @@
 
 namespace game
 {
+    class IWorldView;
+
     enum UnitType
     {
         Scout = 0,
@@ -20,17 +22,27 @@ namespace game
 
             const UnitType type;
 
+            // todo make these private
             sf::Vector2d pos;
             int health;
 
+            void reset();
+
+            int getMaxHealth() const;
+            void damage( int amt );
+
+            double getMovementSpeedPerTurn() const;
             double getMovementSpeedLeft() const;
             void useMovementSpeed( double amount );
-            void moveTo( sf::Vector2d worldPos );
+            void moveTo( IWorldView* world, sf::Vector2d worldPos );
 
             double getAttackRange() const;
+            bool hasAttacked() const;
+            void attack( IWorldView* world, sf::Vector2d worldPos );
 
         private:
-            double movement = 5;
+            double movement;
+            bool attacked;
     };
 }
 
