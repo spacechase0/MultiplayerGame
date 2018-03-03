@@ -129,7 +129,7 @@ namespace client
             for ( const auto& unit : army.second )
             {
                 if ( unit->health <= 0 )
-                    return;
+                    continue;
 
                 sf::CircleShape circle;
                 circle.setRadius( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2 );
