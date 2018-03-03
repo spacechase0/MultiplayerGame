@@ -77,6 +77,15 @@ namespace server
         return turns.front();
     }
 
+    void Match::nextTurn()
+    {
+        turns.push( turns.front() );
+        turns.pop();
+
+        for ( auto& client : clients )
+            client->send( net::Match::CurrentTurnPacket( turns.front() ).toPacket() );
+    }
+
     std::vector< game::Unit* > Match::getUnitsAt( sf::Vector2d pos )
     {
         std::vector< game::Unit* > ret;

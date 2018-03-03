@@ -58,6 +58,8 @@
 		<Unit filename="client/MatchClientController.hpp" />
 		<Unit filename="client/VerifyClientController.cpp" />
 		<Unit filename="client/VerifyClientController.hpp" />
+		<Unit filename="game/IWorldView.cpp" />
+		<Unit filename="game/IWorldView.hpp" />
 		<Unit filename="game/Unit.cpp" />
 		<Unit filename="game/Unit.hpp" />
 		<Unit filename="main.cpp" />
@@ -73,8 +75,12 @@
 		<Unit filename="net/Lobby/StartPacket.hpp" />
 		<Unit filename="net/Lobby/UnitAllocationPacket.cpp" />
 		<Unit filename="net/Lobby/UnitAllocationPacket.hpp" />
+		<Unit filename="net/Match/CommandPacket.cpp" />
+		<Unit filename="net/Match/CommandPacket.hpp" />
 		<Unit filename="net/Match/CurrentTurnPacket.cpp" />
 		<Unit filename="net/Match/CurrentTurnPacket.hpp" />
+		<Unit filename="net/Match/EndTurnPacket.cpp" />
+		<Unit filename="net/Match/EndTurnPacket.hpp" />
 		<Unit filename="net/Match/GameDataPacket.cpp" />
 		<Unit filename="net/Match/GameDataPacket.hpp" />
 		<Unit filename="net/Match/Packet.cpp" />

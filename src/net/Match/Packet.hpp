@@ -15,6 +15,7 @@ namespace net
             GameData = 0,
             CurrentTurn,
             Command,
+            EndTurn,
         };
 
         class Packet : public PacketBase< Id >

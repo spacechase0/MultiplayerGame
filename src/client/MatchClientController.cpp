@@ -10,6 +10,7 @@
 #include "Constants.hpp"
 #include "net/Match/CommandPacket.hpp"
 #include "net/Match/CurrentTurnPacket.hpp"
+#include "net/Match/EndTurnPacket.hpp"
 #include "net/Match/GameDataPacket.hpp"
 #include "net/Match/Packet.hpp"
 
@@ -49,6 +50,8 @@ namespace client
                     mouseMode = Move;
                 else if ( event.key.code == sf::Keyboard::C )
                     mouseMode = Attack;
+                else if ( event.key.code == sf::Keyboard::Space )
+                    client.send( net::Match::EndTurnPacket().toPacket() );
             }
             else if ( event.type == sf::Event::MouseButtonPressed )
             {

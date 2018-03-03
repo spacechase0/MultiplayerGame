@@ -25,6 +25,7 @@ namespace server
             std::vector< const Client* > getClients() const;
 
             sf::Uint64 getCurrentTurn() const;
+            void nextTurn();
 
             virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
 

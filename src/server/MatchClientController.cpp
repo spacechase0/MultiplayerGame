@@ -41,7 +41,7 @@ namespace server
     void MatchClientController::onPacket( sf::Packet& packet )
     {
         auto packetObj = net::Match::Packet::fromPacket( packet );
-        if ( packetObj->id == net::Match::Command )
+        if ( packetObj->id == net::Match::Id::Command )
         {
             auto cmd = static_cast< net::Match::CommandPacket* >( packetObj.get() );
             if ( client.currentMatch->getCurrentTurn() != client.id )
@@ -63,6 +63,12 @@ namespace server
             for ( auto& otherClient : client.currentMatch->getClients() )
                 if ( otherClient != &client )
                     otherClient->send( cmd->toPacket() );
+        }
+        else if ( packetObj->id == net::Match::Id::EndTurn )
+        {
+            if ( client.currentMatch->getCurrentTurn() != client.id )
+                return;
+            client.currentMatch->nextTurn();
         }
     }
 }

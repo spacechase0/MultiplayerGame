@@ -5,6 +5,7 @@
 #include "net/Match/GameDataPacket.hpp"
 #include "net/Match/CurrentTurnPacket.hpp"
 #include "net/Match/CommandPacket.hpp"
+#include "net/Match/EndTurnPacket.hpp"
 
 namespace net
 {
@@ -29,6 +30,7 @@ namespace net
                 case GameData: packetObj.reset( new GameDataPacket() ); break;
                 case CurrentTurn: packetObj.reset( new CurrentTurnPacket() ); break;
                 case Command: packetObj.reset( new CommandPacket() ); break;
+                case EndTurn: packetObj.reset( new EndTurnPacket() ); break;
             }
 
             if ( packetObj )
