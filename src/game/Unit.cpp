@@ -154,12 +154,23 @@ namespace game
             case UnitType::Archer:
                 {
                     auto units = world->getUnitsIntersecting( pos, spot );
+                    Unit* closest = nullptr;
                     for ( auto& unit : units )
                     {
                         if ( unit == this )
                             continue;
-                        unit->damage( 2 );
+                        if ( !closest )
+                            closest = unit;
+                        else
+                        {
+                            double distThis = util::distance( pos, unit->pos );
+                            double distOther = util::distance( pos, closest->pos );
+                            if ( distThis < distOther )
+                                closest = unit;
+                        }
                     }
+                    if ( closest )
+                        closest->damage( 2 );
                 }
                 break;
         }

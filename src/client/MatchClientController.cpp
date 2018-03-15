@@ -322,6 +322,11 @@ namespace client
 
     std::vector< game::Unit* > MatchClientController::getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end )
     {
+        sf::Vector2d left = start, right = end;
+        sf::Vector2d top = start, bottom = end;
+        if ( right.x < left.x ) std::swap( left, right );
+        if ( bottom.y < top.y ) std::swap( top, bottom );
+
         std::vector< game::Unit* > ret;
         for ( auto& army : armies )
             for ( auto& unit : army.second )
@@ -341,6 +346,9 @@ namespace client
                 }
                 else
                 {
+                    if ( unit->pos.x < left.x || unit->pos.x > right.x ||
+                         unit->pos.y < top.y || unit->pos.y > bottom.y )
+                        continue;
                     ret.push_back( unit.get() );
                 }
             }
