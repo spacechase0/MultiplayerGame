@@ -47,7 +47,15 @@ namespace game
 
     int Unit::getMaxHealth() const
     {
-        return 5;
+        switch ( type )
+        {
+            case UnitType::Scout: return 8;
+            case UnitType::Fighter: return 15;
+            case UnitType::Mage: return 4;
+            case UnitType::Archer: return 6;
+        }
+
+        throw std::runtime_error( util::format( "This should never happen. $:$: $\n", __FILE__, __LINE__, __func__ ) );
     }
 
     void Unit::damage( int amt )
