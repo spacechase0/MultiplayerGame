@@ -125,6 +125,14 @@ namespace client
 
         window.clear( sf::Color::White );
         window.setView( view );
+        {
+            sf::CircleShape circle;
+            circle.setRadius( game::WORLD_UNIT_SIZE * game::WORLD_SPREAD * 1.1 );
+            circle.setOrigin( circle.getRadius(), circle.getRadius() );
+            circle.setOutlineColor( sf::Color( 0, 0, 100 ) );
+            circle.setOutlineThickness( 3 );
+            window.draw( circle );
+        }
         for ( const auto& army : armies )
             for ( const auto& unit : army.second )
             {
