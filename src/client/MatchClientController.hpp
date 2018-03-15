@@ -23,6 +23,7 @@ namespace client
             virtual void update() override;
 
             virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
+            virtual std::vector< game::Unit* > getUnitsWithin( sf::Vector2d spot, double dist ) override;
 
         protected:
             virtual void onPacket( sf::Packet& packet ) override;

@@ -211,10 +211,15 @@ namespace client
 
     std::vector< game::Unit* > MatchClientController::getUnitsAt( sf::Vector2d pos )
     {
+        return getUnitsWithin( pos, game::ARMY_UNIT_SIZE );
+    }
+
+    std::vector< game::Unit* > MatchClientController::getUnitsWithin( sf::Vector2d pos, double dist )
+    {
         std::vector< game::Unit* > ret;
         for ( auto& army : armies )
             for ( auto& unit : army.second )
-                if ( util::distance( unit->pos, pos ) < game::ARMY_UNIT_SIZE )
+                if ( util::distance( unit->pos, pos ) < dist )
                     ret.push_back( unit.get() );
         return ret;
     }
@@ -249,6 +254,9 @@ namespace client
 
             client.log( "Current turn: $\n", users[ turn->current ] );
             currentTurn = turn->current;
+
+            for ( auto& unit : armies[ currentTurn ] )
+                unit->reset( this );
         }
         else if ( packetObj->id == net::Match::Id::Command )
         {

@@ -26,7 +26,7 @@ namespace game
             sf::Vector2d pos;
             int health;
 
-            void reset();
+            void reset( IWorldView* world );
 
             int getMaxHealth() const;
             void damage( int amt );
@@ -43,6 +43,9 @@ namespace game
         private:
             double movement;
             bool attacked;
+
+            int chargeTime = 0;
+            sf::Vector2d chargeTarget;
     };
 }
 

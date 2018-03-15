@@ -28,6 +28,7 @@ namespace server
             void nextTurn();
 
             virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
+            virtual std::vector< game::Unit* > getUnitsWithin( sf::Vector2d pos, double dist ) override;
 
         private:
             Server& server;

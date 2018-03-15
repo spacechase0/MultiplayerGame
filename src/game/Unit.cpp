@@ -14,13 +14,31 @@ namespace game
     :   type( theType )
     {
         health = getMaxHealth();
-        reset();
+        attacked = false;
+        movement = getMovementSpeedPerTurn();
     }
 
-    void Unit::reset()
+    void Unit::reset( IWorldView* world )
     {
         if ( health <= 0 )
             return;
+        if ( chargeTime > 0 )
+        {
+            --chargeTime;
+            if ( chargeTime == 0 )
+            {
+                if ( type == UnitType::Mage )
+                {
+                    auto unitsFar = world->getUnitsWithin( chargeTarget, 4 );
+                    for ( auto& unit : unitsFar )
+                        unit->damage( 3 );
+
+                    auto unitsClose = world->getUnitsWithin( chargeTarget, 2 );
+                    for ( auto& unit : unitsClose )
+                        unit->damage( 5 );
+                }
+            }
+        }
 
         attacked = false;
         movement = getMovementSpeedPerTurn();
@@ -55,6 +73,8 @@ namespace game
     {
         if ( health <= 0 )
             return;
+        if ( chargeTime > 0 )
+            return;
 
         double angle = std::atan2( worldPos.y - pos.y, worldPos.x - pos.x );
         double dist = std::min( util::distance( pos, worldPos ), getMovementSpeedLeft() );
@@ -85,12 +105,14 @@ namespace game
     {
         if ( health <= 0 )
             return;
+        if ( chargeTime > 0 )
+            return;
         if ( attacked )
             return;
         attacked = true;
 
         double angle = std::atan2( worldPos.y - pos.y, worldPos.x - pos.x );
-        double dist = std::min( util::distance( pos, worldPos ), getMovementSpeedLeft() );
+        double dist = std::min( util::distance( pos, worldPos ), getAttackRange() );
         sf::Vector2d spot = pos;
         spot.x += std::cos( angle ) * dist;
         spot.y += std::sin( angle ) * dist;
@@ -107,7 +129,8 @@ namespace game
                 break;
 
             case UnitType::Mage:
-                // todo
+                chargeTime = 2;
+                chargeTarget = spot;
                 break;
 
             case UnitType::Archer:

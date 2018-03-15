@@ -84,14 +84,30 @@ namespace server
 
         for ( auto& client : clients )
             client->send( net::Match::CurrentTurnPacket( turns.front() ).toPacket() );
+
+        for ( auto& client : clients )
+        {
+            if ( client->id == turns.front() )
+            {
+                for ( auto& unit : client->units )
+                {
+                    unit->reset( this );
+                }
+            }
+        }
     }
 
     std::vector< game::Unit* > Match::getUnitsAt( sf::Vector2d pos )
     {
+        return getUnitsWithin( pos, game::ARMY_UNIT_SIZE );
+    }
+
+    std::vector< game::Unit* > Match::getUnitsWithin( sf::Vector2d pos, double dist )
+    {
         std::vector< game::Unit* > ret;
         for ( auto& client : clients )
             for ( auto& unit : client->units )
-                if ( util::distance( unit->pos, pos ) < game::ARMY_UNIT_SIZE )
+                if ( util::distance( unit->pos, pos ) < dist )
                     ret.push_back( unit.get() );
         return ret;
     }
