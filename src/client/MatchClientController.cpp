@@ -216,6 +216,84 @@ namespace client
         text.setFillColor( sf::Color::Black );
         window.draw( text );
 
+        int iy = 0;
+        for ( const auto& unit : armies[ client.id ] )
+        {
+            if ( unit->health <= 0 )
+                continue;
+
+            sf::RectangleShape rect;
+            rect.setFillColor( sf::Color( 200, 200, 200 ) );
+            rect.setOutlineColor( sf::Color::Black );
+            rect.setOutlineThickness( 2 );
+            rect.setSize( sf::Vector2f( 125, 50 ) );
+            rect.setPosition( 20, 50 + 70 * iy );
+            window.draw( rect );
+
+            text.setCharacterSize( 15 );
+            switch ( unit->type )
+            {
+                case game::UnitType::Scout:   text.setString( "Scout" );   break;
+                case game::UnitType::Fighter: text.setString( "Fighter" ); break;
+                case game::UnitType::Mage:    text.setString( "Mage" );    break;
+                case game::UnitType::Archer:  text.setString( "Archer" );  break;
+            }
+            text.setPosition( rect.getPosition().x + 5 , rect.getPosition().y + 5 );
+            window.draw( text );
+
+            if ( !unit->hasAttacked() || unit->getChargeTime() > 0 )
+            {
+                sf::CircleShape circle;
+                circle.setRadius( 3 );
+                circle.setOrigin( sf::Vector2f( circle.getRadius(), circle.getRadius() ) );
+                circle.setPosition( rect.getPosition().x + rect.getSize().x - 5 - circle.getRadius(), rect.getPosition().y + 5 + circle.getRadius() );
+                circle.setFillColor( unit->getChargeTime() > 0 ? sf::Color::Blue : sf::Color::Red );
+                circle.setOutlineThickness( 1 );
+                circle.setOutlineColor( sf::Color::Black );
+                window.draw( circle );
+            }
+
+            sf::CircleShape circle;
+            circle.setRadius( game::ARMY_UNIT_SIZE * game::WORLD_UNIT_SIZE / 2 );
+            switch ( unit->type )
+            {
+                case game::UnitType::Fighter: circle.setFillColor( sf::Color( 200, 0, 0 ) ); break;
+                case game::UnitType::Mage: circle.setFillColor( sf::Color::Blue ); break;
+                case game::UnitType::Archer: circle.setFillColor( sf::Color::Green ); break;
+                default: circle.setFillColor( sf::Color::White );
+            }
+            circle.setOutlineColor( sf::Color::Black );
+            circle.setOutlineThickness( UNIT_OUTLINE );
+            circle.setOrigin( sf::Vector2f( circle.getRadius(), circle.getRadius() ) );
+            circle.setPosition( rect.getPosition().x + 10 + circle.getRadius(), rect.getPosition().y + 5 + 15 + 5 + circle.getRadius() );
+            window.draw( circle );
+
+            int rsx = rect.getSize().x;
+
+            rect.setSize( sf::Vector2f( rsx - circle.getRadius() * 2 - 30, 8 ) );
+            rect.setPosition( rect.getPosition().x + circle.getRadius() * 2 + 25, rect.getPosition().y + 5 + 15 + 5 );
+            rect.setFillColor( sf::Color( 100, 0, 0 ) );
+            rect.setOutlineThickness( 0 );
+            rect.setOutlineColor( sf::Color::Transparent );
+            window.draw( rect );
+            rect.setSize( sf::Vector2f( rect.getSize().x * ( static_cast< float >( unit->health ) / unit->getMaxHealth() ), rect.getSize().y ) );
+            rect.setFillColor( sf::Color( 0, 200, 0 ) );
+            window.draw( rect );
+
+            rect.move( 0, 12 );
+            rect.setSize( sf::Vector2f( rsx - circle.getRadius() * 2 - 30, 8 ) );
+            rect.setFillColor( sf::Color( 100, 100, 0 ) );
+            window.draw( rect );
+            if ( unit->getMovementSpeedLeft() > 0 )
+            {
+                rect.setSize( sf::Vector2f( rect.getSize().x * ( unit->getMovementSpeedLeft() / unit->getMovementSpeedPerTurn() ), rect.getSize().y ) );
+                rect.setFillColor( sf::Color( 200, 200, 0 ) );
+                window.draw( rect );
+            }
+
+            ++iy;
+        }
+
         window.display();
     }
 

@@ -23,7 +23,7 @@ namespace game
 
     constexpr double WORLD_UNIT_SIZE = 16;
     constexpr double ARMY_UNIT_SIZE = 1;
-    constexpr int WORLD_SPREAD = 30;
+    constexpr int WORLD_SPREAD = 20;
     constexpr int ARMY_SPREAD = 3;
 }
 
