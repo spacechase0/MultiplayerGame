@@ -320,6 +320,33 @@ namespace client
         return ret;
     }
 
+    std::vector< game::Unit* > MatchClientController::getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end )
+    {
+        std::vector< game::Unit* > ret;
+        for ( auto& army : armies )
+            for ( auto& unit : army.second )
+            {
+                // https://stackoverflow.com/a/23017208/1687492
+                double dx = end.x - start.x;
+                double dy = end.y - start.y;
+
+                double a = dx * dx + dy * dy;
+                double b = 2 * ( dx * ( start.x - unit->pos.x ) + dy * ( start.y - unit->pos.y ) );
+                double c = ( start.x - unit->pos.x ) * ( start.x - unit->pos.x ) + ( start.y - unit->pos.y ) * ( start.y - unit->pos.y ) - game::ARMY_UNIT_SIZE * game::ARMY_UNIT_SIZE;
+
+                double det = b * b - 4 * a * c;
+                if ( a <= 0.0000001 || det < 0 )
+                {
+                    continue;
+                }
+                else
+                {
+                    ret.push_back( unit.get() );
+                }
+            }
+        return ret;
+    }
+
     void MatchClientController::onPacket( sf::Packet& packet )
     {
         auto packetObj = net::Match::Packet::fromPacket( packet );

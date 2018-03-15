@@ -111,4 +111,31 @@ namespace server
                     ret.push_back( unit.get() );
         return ret;
     }
+
+    std::vector< game::Unit* > Match::getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end )
+    {
+        std::vector< game::Unit* > ret;
+        for ( auto&client : clients )
+            for ( auto& unit : client->units )
+            {
+                // https://stackoverflow.com/a/23017208/1687492
+                double dx = end.x - start.x;
+                double dy = end.y - start.y;
+
+                double a = dx * dx + dy * dy;
+                double b = 2 * ( dx * ( start.x - unit->pos.x ) + dy * ( start.y - unit->pos.y ) );
+                double c = ( start.x - unit->pos.x ) * ( start.x - unit->pos.x ) + ( start.y - unit->pos.y ) * ( start.y - unit->pos.y ) - game::ARMY_UNIT_SIZE * game::ARMY_UNIT_SIZE;
+
+                double det = b * b - 4 * a * c;
+                if ( a <= 0.0000001 || det < 0 )
+                {
+                    continue;
+                }
+                else
+                {
+                    ret.push_back( unit.get() );
+                }
+            }
+        return ret;
+    }
 }

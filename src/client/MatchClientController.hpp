@@ -24,6 +24,7 @@ namespace client
 
             virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
             virtual std::vector< game::Unit* > getUnitsWithin( sf::Vector2d spot, double dist ) override;
+            virtual std::vector< game::Unit* > getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end ) override;
 
         protected:
             virtual void onPacket( sf::Packet& packet ) override;

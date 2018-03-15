@@ -29,6 +29,7 @@ namespace server
 
             virtual std::vector< game::Unit* > getUnitsAt( sf::Vector2d pos ) override;
             virtual std::vector< game::Unit* > getUnitsWithin( sf::Vector2d pos, double dist ) override;
+            virtual std::vector< game::Unit* > getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end ) override;
 
         private:
             Server& server;

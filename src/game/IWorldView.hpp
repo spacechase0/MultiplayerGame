@@ -16,6 +16,7 @@ namespace game
 
             virtual std::vector< Unit* > getUnitsAt( sf::Vector2d spot ) = 0;
             virtual std::vector< Unit* > getUnitsWithin( sf::Vector2d spot, double dist ) = 0;
+            virtual std::vector< Unit* > getUnitsIntersecting( sf::Vector2d start, sf::Vector2d end ) = 0;
     };
 }
 

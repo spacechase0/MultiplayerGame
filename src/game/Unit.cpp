@@ -152,7 +152,15 @@ namespace game
                 break;
 
             case UnitType::Archer:
-                // todo
+                {
+                    auto units = world->getUnitsIntersecting( pos, spot );
+                    for ( auto& unit : units )
+                    {
+                        if ( unit == this )
+                            continue;
+                        unit->damage( 2 );
+                    }
+                }
                 break;
         }
 
