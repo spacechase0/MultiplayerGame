@@ -26,7 +26,7 @@ namespace client
     MatchClientController::MatchClientController( Client& theClient )
     :   ClientController::ClientController( theClient )
     {
-        window.create( sf::VideoMode( 640, 480 ), "Game" );
+        window.create( sf::VideoMode( 640, 480 ), util::format( "Game - $", client.username ) );
         font.loadFromFile( "C:\\Windows\\Fonts\\arial.ttf" );
         view = window.getDefaultView();
     }

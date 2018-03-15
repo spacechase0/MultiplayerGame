@@ -14,7 +14,7 @@ namespace client
     LobbyClientController::LobbyClientController( Client& theClient )
     :   ClientController::ClientController( theClient )
     {
-        window.create( sf::VideoMode( 640, 480 ), "Game", sf::Style::Titlebar | sf::Style::Close );
+        window.create( sf::VideoMode( 640, 480 ), util::format( "Game - $", client.username ), sf::Style::Titlebar | sf::Style::Close );
         font.loadFromFile( "C:\\Windows\\Fonts\\arial.ttf" );
 
         allocated[ game::UnitType::Scout ] = 0;
