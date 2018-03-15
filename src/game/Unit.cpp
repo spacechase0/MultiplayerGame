@@ -57,7 +57,15 @@ namespace game
 
     double Unit::getMovementSpeedPerTurn() const
     {
-        return 5;
+        switch ( type )
+        {
+            case UnitType::Scout: return 10;
+            case UnitType::Fighter: return 7;
+            case UnitType::Mage: return 5;
+            case UnitType::Archer: return 5;
+        }
+
+        throw std::runtime_error( util::format( "This should never happen. $:$: $\n", __FILE__, __LINE__, __func__ ) );
     }
 
     double Unit::getMovementSpeedLeft() const
