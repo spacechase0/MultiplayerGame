@@ -40,6 +40,9 @@ namespace game
             bool hasAttacked() const;
             void attack( IWorldView* world, sf::Vector2d worldPos );
 
+            int getChargeTime() const;
+            sf::Vector2d getChargeTarget() const;
+
         private:
             double movement;
             bool attacked;

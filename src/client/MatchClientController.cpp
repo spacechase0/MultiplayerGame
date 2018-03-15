@@ -195,6 +195,16 @@ namespace client
                         window.draw( circle );
                     }
                 }
+
+                if ( unit->type == game::UnitType::Mage && unit->getChargeTime() > 0 && unit->getChargeTime() <= 1 )
+                {
+                    circle.setRadius( 4 * game::WORLD_UNIT_SIZE );
+                    circle.setOrigin( sf::Vector2f( circle.getRadius(), circle.getRadius() ) );
+                    circle.setFillColor( sf::Color::Transparent );
+                    circle.setOutlineColor( sf::Color::Blue );
+                    circle.setPosition( sf::Vector2f( unit->getChargeTarget() * game::WORLD_UNIT_SIZE ) );
+                    window.draw( circle );
+                }
             }
 
         window.setView( sf::View( sf::FloatRect( 0, 0, window.getSize().x, window.getSize().y ) ) );

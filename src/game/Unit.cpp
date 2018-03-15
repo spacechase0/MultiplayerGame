@@ -38,6 +38,7 @@ namespace game
                         unit->damage( 5 );
                 }
             }
+            movement = 0;
         }
 
         attacked = false;
@@ -131,6 +132,7 @@ namespace game
             case UnitType::Mage:
                 chargeTime = 2;
                 chargeTarget = spot;
+                movement = 0;
                 break;
 
             case UnitType::Archer:
@@ -140,5 +142,15 @@ namespace game
 
         if ( movement != getMovementSpeedPerTurn() )
             movement = 0;
+    }
+
+    int Unit::getChargeTime() const
+    {
+        return chargeTime;
+    }
+
+    sf::Vector2d Unit::getChargeTarget() const
+    {
+        return chargeTarget;
     }
 }
