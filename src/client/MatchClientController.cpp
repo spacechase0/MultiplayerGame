@@ -232,7 +232,7 @@ namespace client
 
             sf::RectangleShape rect;
             rect.setFillColor( sf::Color( 200, 200, 200 ) );
-            rect.setOutlineColor( sf::Color::Black );
+            rect.setOutlineColor( unit.get() == selected ? sf::Color::Yellow : sf::Color::Black );
             rect.setOutlineThickness( 2 );
             rect.setSize( sf::Vector2f( 125, 50 ) );
             rect.setPosition( 20, 50 + 70 * iy );
